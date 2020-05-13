@@ -23,7 +23,7 @@ namespace Easy_Logger.Loggers
             var directory = GetTextLogDirectory(loggerEntry.Timestamp, Settings);
             var filename = GetTextLogFilename(loggerEntry.Timestamp, Settings);
 
-            var path = Path.Combine(directory, filename);
+            var path = Path.Combine(directory, $"{filename}.txt");
 
             string message;
 
