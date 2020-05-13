@@ -8,16 +8,16 @@ using System.Linq;
 namespace Easy_Logger
 {
     /// <summary>
-    /// 
+    /// Main class to record data to logging endpoints
     /// </summary>
     public class EasyLoggerService
     {
         private readonly List<ILogger> Loggers;
 
         /// <summary>
-        /// 
+        /// Prepares the logging service for recording to logging endpoints
         /// </summary>
-        /// <param name="loggingConfiguration"></param>
+        /// <param name="loggingConfiguration">The parameters to record log records with</param>
         public EasyLoggerService(ILoggingConfiguration loggingConfiguration)
         {
             Settings = loggingConfiguration;
@@ -36,14 +36,14 @@ namespace Easy_Logger
         }
 
         /// <summary>
-        /// 
+        /// The configuration settings to use when recording logs
         /// </summary>
         public ILoggingConfiguration Settings { get; private set; }
 
         /// <summary>
-        /// 
+        /// Records the provided message to the configured endpoints
         /// </summary>
-        /// <param name="message"></param>
+        /// <param name="message">The text to record to the log(s)</param>
         public bool SaveToLog(string message)
         {
             return SaveToLog(new LoggerEntry()
@@ -53,9 +53,9 @@ namespace Easy_Logger
         }
 
         /// <summary>
-        /// 
+        /// Records the provided logging entry to the configured endpoints
         /// </summary>
-        /// <param name="loggerEntry"></param>
+        /// <param name="loggerEntry">The data to record to the log(s)</param>
         public bool SaveToLog(ILoggerEntry loggerEntry)
         {
             Loggers.All(x => x.SaveToLog(loggerEntry));
@@ -64,9 +64,9 @@ namespace Easy_Logger
         }
 
         /// <summary>
-        /// 
+        /// Adds a custom logging endpoint
         /// </summary>
-        /// <param name="logger"></param>
+        /// <param name="logger">The endpoint to add</param>
         public void AddLogger(ILogger logger)
         {
             Loggers.Add(logger);

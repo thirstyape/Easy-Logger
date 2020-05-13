@@ -7,7 +7,7 @@ using System.Diagnostics.CodeAnalysis;
 namespace Easy_Logger
 {
     /// <summary>
-    /// 
+    /// Provides methods to easily facilitate SQL functions
     /// </summary>
     [SuppressMessage("Security", "CA2100:Review SQL queries for security vulnerabilities", Justification = "Class is known to allow unsafe sql, developer must use at own risk")]
     public class SqlServerService
@@ -16,31 +16,31 @@ namespace Easy_Logger
         private SqlCommand command;
 
         /// <summary>
-        /// 
+        /// Prepares the class to run SQL queries
         /// </summary>
-        /// <param name="connectionString"></param>
+        /// <param name="connectionString">The details to connect to the database with</param>
         public SqlServerService(string connectionString)
         {
             connection = new SqlConnection(connectionString);
         }
 
         /// <summary>
-        /// 
+        /// Prepares the class to run SQL queries
         /// </summary>
-        /// <param name="connectionString"></param>
+        /// <param name="connectionString">The details to connect to the database with</param>
         public SqlServerService(SqlConnectionStringBuilder connectionString)
         {
             connection = new SqlConnection(connectionString.ToString());
         }
 
         /// <summary>
-        /// 
+        /// Prepares the class to run SQL queries
         /// </summary>
-        /// <param name="server"></param>
-        /// <param name="database"></param>
-        /// <param name="username"></param>
-        /// <param name="password"></param>
-        /// <param name="integratedSecurity"></param>
+        /// <param name="server">The DNS name or IP address of the server to connect to</param>
+        /// <param name="database">The name of the database to run queries against</param>
+        /// <param name="username">The username to access the server</param>
+        /// <param name="password">The password to access the server</param>
+        /// <param name="integratedSecurity">If true will ignore username and password and use Windows integrated security</param>
         public SqlServerService(string server, string database, string username, string password, bool integratedSecurity)
         {
             var connectionString = new SqlConnectionStringBuilder
@@ -63,11 +63,11 @@ namespace Easy_Logger
 
 
         /// <summary>
-        /// 
+        /// Sends the provided SQL text to the database in an ExecuteReader command
         /// </summary>
-        /// <param name="sql"></param>
-        /// <param name="parameters"></param>
-        /// <param name="commandType"></param>
+        /// <param name="sql">The query text to run</param>
+        /// <param name="parameters">Parameters to apply to the query</param>
+        /// <param name="commandType">The type of query to run</param>
         /// <exception cref="DataException"></exception>
         public IDataReader ExecuteReader(string sql, List<SqlParameter> parameters = null, CommandType commandType = CommandType.Text)
         {
@@ -92,11 +92,11 @@ namespace Easy_Logger
         }
 
         /// <summary>
-        /// 
+        /// Sends the provided SQL text to the database in an ExecuteAdapter command
         /// </summary>
-        /// <param name="sql"></param>
-        /// <param name="parameters"></param>
-        /// <param name="commandType"></param>
+        /// <param name="sql">The query text to run</param>
+        /// <param name="parameters">Parameters to apply to the query</param>
+        /// <param name="commandType">The type of query to run</param>
         /// <exception cref="DataException"></exception>
         public DataTable ExecuteAdapter(string sql, List<SqlParameter> parameters = null, CommandType commandType = CommandType.Text)
         {
@@ -127,11 +127,11 @@ namespace Easy_Logger
         }
 
         /// <summary>
-        /// 
+        /// Sends the provided SQL text to the database in an ExecuteScalar command
         /// </summary>
-        /// <param name="sql"></param>
-        /// <param name="parameters"></param>
-        /// <param name="commandType"></param>
+        /// <param name="sql">The query text to run</param>
+        /// <param name="parameters">Parameters to apply to the query</param>
+        /// <param name="commandType">The type of query to run</param>
         /// <exception cref="DataException"></exception>
         public object ExecuteScalar(string sql, List<SqlParameter> parameters = null, CommandType commandType = CommandType.Text)
         {
@@ -156,11 +156,11 @@ namespace Easy_Logger
         }
 
         /// <summary>
-        /// 
+        /// Sends the provided SQL text to the database in an ExecuteNonQuery command
         /// </summary>
-        /// <param name="sql"></param>
-        /// <param name="parameters"></param>
-        /// <param name="commandType"></param>
+        /// <param name="sql">The query text to run</param>
+        /// <param name="parameters">Parameters to apply to the query</param>
+        /// <param name="commandType">The type of query to run</param>
         /// <exception cref="DataException"></exception>
         public int ExecuteNonQuery(string sql, List<SqlParameter> parameters = null, CommandType commandType = CommandType.Text)
         {
@@ -209,11 +209,11 @@ namespace Easy_Logger
         }
 
         /// <summary>
-        /// 
+        /// Prepares a query to be run on the database
         /// </summary>
-        /// <param name="sql"></param>
-        /// <param name="parameters"></param>
-        /// <param name="commandType"></param>
+        /// <param name="sql">The query text to run</param>
+        /// <param name="parameters">Parameters to apply to the query</param>
+        /// <param name="commandType">The type of query to run</param>
         private void Prepare(string sql, List<SqlParameter> parameters = null, CommandType commandType = CommandType.Text)
         {
             command = new SqlCommand()
@@ -231,9 +231,9 @@ namespace Easy_Logger
         }
 
         /// <summary>
-        /// 
+        /// Disposes of active objects and clears provided parameters
         /// </summary>
-        /// <param name="parameters"></param>
+        /// <param name="parameters">Parameters to apply to the query</param>
         private void Cleanup(List<SqlParameter> parameters = null)
         {
             if (connection.State == ConnectionState.Open)

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace Easy_Logger.Loggers
 {
     /// <summary>
-    /// 
+    /// Logging endpoint that records to text files
     /// </summary>
     public class TextLogger : FileLoggerBase, ILogger
     {
@@ -41,11 +41,11 @@ namespace Easy_Logger.Loggers
         }
 
         /// <summary>
-        /// 
+        /// Saves the provided entry to the endpoint
         /// </summary>
-        /// <param name="path"></param>
-        /// <param name="entry"></param>
-        /// <param name="retries"></param>
+        /// <param name="path">The full path to store the entry</param>
+        /// <param name="entry">The log data to record</param>
+        /// <param name="retries">The number of times to retry on failure</param>
         private void SaveToLog(string path, string entry, int retries = 3)
         {
             try
@@ -79,9 +79,9 @@ namespace Easy_Logger.Loggers
         private delegate string ToStringDelegate();
 
         /// <summary>
-        /// 
+        /// Checks to see whether the provided object has a ToString() override method
         /// </summary>
-        /// <param name="instance"></param>
+        /// <param name="instance">The object to check</param>
         private bool OverridesToString(object instance)
         {
             if (instance == null)

@@ -10,7 +10,7 @@ using System.Reflection;
 namespace Easy_Logger.Loggers
 {
     /// <summary>
-    /// 
+    /// Logging endpoint that records to a SQL database
     /// </summary>
     public class SqlLogger : ILogger
     {
@@ -21,9 +21,9 @@ namespace Easy_Logger.Loggers
         private Type lastEntryType;
 
         /// <summary>
-        /// 
+        /// Prepares the logger for adding data to a SQL database
         /// </summary>
-        /// <param name="loggingConfiguration"></param>
+        /// <param name="loggingConfiguration">The settings to use with the logger</param>
         /// <exception cref="ArgumentNullException"></exception>
         public SqlLogger(ILoggingConfiguration loggingConfiguration)
         {
@@ -67,9 +67,9 @@ namespace Easy_Logger.Loggers
         }
 
         /// <summary>
-        /// 
+        /// Retrieves the column names to use when saving log data to SQL
         /// </summary>
-        /// <param name="loggerEntry"></param>
+        /// <param name="loggerEntry">The entry to save to SQL</param>
         private void SetColumnNames(ILoggerEntry loggerEntry)
         {
             // Use cached values when possible

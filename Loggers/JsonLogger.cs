@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace Easy_Logger.Loggers
 {
     /// <summary>
-    /// 
+    /// Logging endpoint that records to JSON files
     /// </summary>
     public class JsonLogger : FileLoggerBase, ILogger
     {
@@ -31,11 +31,11 @@ namespace Easy_Logger.Loggers
         }
 
         /// <summary>
-        /// 
+        /// Saves the provided entry to the endpoint
         /// </summary>
-        /// <param name="path"></param>
-        /// <param name="entry"></param>
-        /// <param name="retries"></param>
+        /// <param name="path">The full path to store the entry</param>
+        /// <param name="entry">The log data to record</param>
+        /// <param name="retries">The number of times to retry on failure</param>
         private void SaveToLog(string path, ILoggerEntry entry, int retries = 3)
         {
             try

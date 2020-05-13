@@ -9,16 +9,16 @@ using System.Text.RegularExpressions;
 namespace Easy_Logger.Loggers
 {
     /// <summary>
-    /// 
+    /// Base class that provides methods to assist with text-based logging endpoints (ex. .txt or .json)
     /// </summary>
     public abstract class FileLoggerBase
     {
         protected readonly Dictionary<string, string> FilenameDateParts;
 
         /// <summary>
-        /// 
+        /// Prepares the file and directory naming systems
         /// </summary>
-        /// <param name="loggingConfiguration"></param>
+        /// <param name="loggingConfiguration">The settings to use with the endpoint</param>
         /// <exception cref="ArgumentException"></exception>
         /// <exception cref="ArgumentNullException"></exception>
         protected FileLoggerBase(ILoggingConfiguration loggingConfiguration)
@@ -50,10 +50,10 @@ namespace Easy_Logger.Loggers
         }
 
         /// <summary>
-        /// 
+        /// Returns the directory to save logs within after applying any required date based folders
         /// </summary>
-        /// <param name="date"></param>
-        /// <param name="loggingConfiguration"></param>
+        /// <param name="date">The date to store the log</param>
+        /// <param name="loggingConfiguration">The settings to use with the endpoint</param>
         protected string GetTextLogDirectory(DateTime date, ILoggingConfiguration loggingConfiguration)
         {
             if (loggingConfiguration.UseDatedSubdirectory == false)
@@ -68,7 +68,7 @@ namespace Easy_Logger.Loggers
             {
                 DatedSubdirectoryModes.Hourly => $"{year}\\{month}\\{day}\\{hour}",
                 DatedSubdirectoryModes.Daily => $"{year}\\{month}\\{day}",
-                DatedSubdirectoryModes.Weekly => $"{year}\\{month}",
+                DatedSubdirectoryModes.Monthly => $"{year}\\{month}",
                 DatedSubdirectoryModes.Yearly => year.ToString(),
                 _ => null,
             };
@@ -81,10 +81,10 @@ namespace Easy_Logger.Loggers
         }
 
         /// <summary>
-        /// 
+        /// Returns the filename to save logs under after applying any required date based filenaming
         /// </summary>
-        /// <param name="date"></param>
-        /// <param name="loggingConfiguration"></param>
+        /// <param name="date">The date to store the log</param>
+        /// <param name="loggingConfiguration">The settings to use with the endpoint</param>
         protected string GetTextLogFilename(DateTime date, ILoggingConfiguration loggingConfiguration)
         {
             var filename = loggingConfiguration.LogFilename;
