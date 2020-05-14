@@ -58,9 +58,7 @@ namespace Easy_Logger
         /// <param name="loggerEntry">The data to record to the log(s)</param>
         public bool SaveToLog(ILoggerEntry loggerEntry)
         {
-            Loggers.All(x => x.SaveToLog(loggerEntry));
-
-            return true;
+            return Loggers.All(x => x.SaveToLog(loggerEntry));
         }
 
         /// <summary>

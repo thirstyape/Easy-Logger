@@ -42,7 +42,7 @@ namespace Easy_Logger.Loggers
             {
                 // Write to log
                 using var writer = new StreamWriter(File.Open(path, FileMode.Append));
-                writer.WriteLine(JsonSerializer.Serialize(entry));
+                writer.WriteLine(JsonSerializer.Serialize(entry) + ',');
             }
             catch
             {
