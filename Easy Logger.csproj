@@ -3,13 +3,15 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
     <RootNamespace>Easy_Logger</RootNamespace>
-    <PackageId>Easy.Logger</PackageId>
+    <PackageId>Easy.Log.Writer</PackageId>
     <Authors>Nathanael Frey</Authors>
     <Company>The Thirsty Ape</Company>
     <Copyright>Copyright 2020 The Thirsty Ape</Copyright>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageIcon>icon.png</PackageIcon>
-    <PackageTags>logger logging log utility</PackageTags>
+    <PackageTags>logger logging log sql text json utility</PackageTags>
+    <Description>This project was created to provide an easy to use and configurable logging library. If the default configuration is sufficient for your needs the library can be used out of the box without further setup. However, if you have specific logging needs you can alter the library configuration settings and also provide custom logging methods.</Description>
+    <RepositoryUrl>https://github.com/thirstyape/Easy-Logger</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>
