@@ -23,7 +23,7 @@ To use this library either clone a copy of the repository or check out the NuGet
 
 ### Usage
 
-** Basic Example **
+**Basic Example**
 
 The following example provides a complete use case.
 
@@ -53,7 +53,7 @@ var configuration = new LoggingConfiguration()
 var logger = new EasyLoggerService(configuration);
 ```
 
-** Adding A Custom Logging Endpoint **
+**Adding A Custom Logging Endpoint**
 
 The system also supports adding your own logging endpoints that will run with the built-in ones. This is done by using ```ILogger```.
 
@@ -93,7 +93,7 @@ logger.AddLogger(new ConsoleLogger(configuration));
 logger.SaveToLog(input);
 ```
 
-** Adding A Custom Log Entry Class **
+**Adding A Custom Log Entry Class**
 
 The system also supports adding your own class to contain log entry data. This provides the benefits of allowing your custom endpoints to consume custom data as well as allowing use of custom formats for the built in text logging endpoint.
 
@@ -136,7 +136,7 @@ var entry = new MyCustomLoggerEntry()
 logger.SaveToLog(entry);
 ```
 
-** Using Custom SQL Column Mappings **
+**Using Custom SQL Column Mappings**
 
 The system supports mapping the SQL logs to custom columns that have different names or even data types than the built in values.
 
