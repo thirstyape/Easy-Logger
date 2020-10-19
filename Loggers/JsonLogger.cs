@@ -9,15 +9,17 @@ namespace Easy_Logger.Loggers
     /// <summary>
     /// Logging endpoint that records to JSON files
     /// </summary>
-    public class JsonLogger : FileLoggerBase, ILogger
+    public class JsonLogger : FileLoggerBase, ILoggerEndpoint
     {
         public JsonLogger(ILoggingConfiguration loggingConfiguration) : base(loggingConfiguration)
         {
             Settings = loggingConfiguration;
         }
 
+        /// <inheritdoc/>
         public ILoggingConfiguration Settings { get; set; }
 
+        /// <inheritdoc/>
         public bool SaveToLog(ILoggerEntry loggerEntry)
         {
             var directory = GetTextLogDirectory(loggerEntry.Timestamp, Settings);

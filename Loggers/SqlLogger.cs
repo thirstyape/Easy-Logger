@@ -12,7 +12,7 @@ namespace Easy_Logger.Loggers
     /// <summary>
     /// Logging endpoint that records to a SQL database
     /// </summary>
-    public class SqlLogger : ILogger
+    public class SqlLogger : ILoggerEndpoint
     {
         private readonly SqlServerService sql;
         private readonly List<SqlParameter> parameters;
@@ -41,8 +41,10 @@ namespace Easy_Logger.Loggers
             parameters = new List<SqlParameter>();
         }
 
+        /// <inheritdoc/>
         public ILoggingConfiguration Settings { get; set; }
 
+        /// <inheritdoc/>
         public bool SaveToLog(ILoggerEntry loggerEntry)
         {
             try

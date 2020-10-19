@@ -10,6 +10,7 @@ The default implementation is capable of:
 - Adding dated folders to text-based logs (ex. /logs/2020/05/01/log.log)
 - Adding dated filenames to text-based logs (ex. /logs/2020-05-01.log)
 - Adding custom column names to SQL based logs
+- Being used as an ILogger implementation for ASP.NET and other API type applications
 
 This can also be extended to record logs via custom logging endpoints.
 
@@ -55,12 +56,12 @@ var logger = new EasyLoggerService(configuration);
 
 **Adding A Custom Logging Endpoint**
 
-The system also supports adding your own logging endpoints that will run with the built-in ones. This is done by using ```ILogger```.
+The system also supports adding your own logging endpoints that will run with the built-in ones. This is done by using ```ILoggerEndpoint```.
 
 The sample tester class.
 
 ```
-public class ConsoleLogger : ILogger
+public class ConsoleLogger : ILoggerEndpoint
 {
     public ConsoleLogger(ILoggingConfiguration loggingConfiguration)
     {
@@ -156,6 +157,30 @@ public class MyCustomLoggerEntry : ILoggerEntry
 
     [Column("MyCustomSeverityColumn")]
     public LogLevel Severity { get; set; }
+}
+```
+
+**Using in ASP.NET or a Web API**
+
+There are two additional classes that integrate the Easy Logger Service with ASP.NET based projects.
+
+To use with such a project simply use the ```EasyWebLogProvider``` class in your ```ConfigureServices()``` method as follows.
+
+```
+public void ConfigureServices(IServiceCollection services) {
+    // Your other startup stuff
+
+    var loggingConfiguration = new LoggingConfiguration() {
+        LogDirectory = "C:\\MyLogDirectory"
+    };
+
+    var logLevels = new LogLevel[] { LogLevel.Warning, LogLevel.Error, LogLevel.Critical };
+
+    services.AddLogging(logging => 
+    {
+        logging.ClearProviders();
+        logging.AddProvider(new EasyWebLogProvider(loggingConfiguration, logLevels));
+    });
 }
 ```
 

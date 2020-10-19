@@ -12,7 +12,7 @@ namespace Easy_Logger
     /// </summary>
     public class EasyLoggerService
     {
-        private readonly List<ILogger> Loggers;
+        protected readonly List<ILoggerEndpoint> Endpoints;
 
         /// <summary>
         /// Prepares the logging service for recording to logging endpoints
@@ -23,16 +23,16 @@ namespace Easy_Logger
             Settings = loggingConfiguration;
 
             // Prepare loggers
-            Loggers = new List<ILogger>();
+            Endpoints = new List<ILoggerEndpoint>();
 
             if (Settings.UseTextLogger)
-                Loggers.Add(new TextLogger(Settings));
+                Endpoints.Add(new TextLogger(Settings));
 
             if (Settings.UseJsonLogger)
-                Loggers.Add(new JsonLogger(Settings));
+                Endpoints.Add(new JsonLogger(Settings));
 
             if (Settings.UseSqlLogger)
-                Loggers.Add(new SqlLogger(Settings));
+                Endpoints.Add(new SqlLogger(Settings));
         }
 
         /// <summary>
@@ -58,16 +58,16 @@ namespace Easy_Logger
         /// <param name="loggerEntry">The data to record to the log(s)</param>
         public bool SaveToLog(ILoggerEntry loggerEntry)
         {
-            return Loggers.All(x => x.SaveToLog(loggerEntry));
+            return Endpoints.All(x => x.SaveToLog(loggerEntry));
         }
 
         /// <summary>
         /// Adds a custom logging endpoint
         /// </summary>
         /// <param name="logger">The endpoint to add</param>
-        public void AddLogger(ILogger logger)
+        public void AddLogger(ILoggerEndpoint logger)
         {
-            Loggers.Add(logger);
+            Endpoints.Add(logger);
         }
     }
 }

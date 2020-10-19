@@ -3,7 +3,7 @@
     /// <summary>
     /// Defines properties and methods required to record data to a logging endpoint
     /// </summary>
-    public interface ILogger
+    public interface ILoggerEndpoint
     {
         /// <summary>
         /// The configuration object to pass to the logger
