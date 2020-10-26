@@ -12,9 +12,14 @@
     <PackageTags>logger logging log sql text json utility</PackageTags>
     <Description>This project was created to provide an easy to use and configurable logging library. If the default configuration is sufficient for your needs the library can be used out of the box without further setup. However, if you have specific logging needs you can alter the library configuration settings and also provide custom logging methods.</Description>
     <RepositoryUrl>https://github.com/thirstyape/Easy-Logger</RepositoryUrl>
-    <Version>1.0.1</Version>
-    <PackageReleaseNotes>1.0.1
+    <Version>1.0.2</Version>
+    <PackageReleaseNotes>1.0.2
+Fix issue causing logger to fail on Linux deployments
+
+1.0.1
 Add ASP.NET compatible log provider</PackageReleaseNotes>
+    <AssemblyVersion>1.0.2.0</AssemblyVersion>
+    <FileVersion>1.0.2.0</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
