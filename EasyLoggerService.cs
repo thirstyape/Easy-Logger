@@ -12,6 +12,9 @@ namespace Easy_Logger
     /// </summary>
     public class EasyLoggerService
     {
+        /// <summary>
+        /// Contains the individual logging endpoints
+        /// </summary>
         protected readonly List<ILoggerEndpoint> Endpoints;
 
         /// <summary>

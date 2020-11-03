@@ -1,0 +1,412 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Easy Logger</name>
+    </assembly>
+    <members>
+        <member name="T:Easy_Logger.EasyLoggerService">
+            <summary>
+            Main class to record data to logging endpoints
+            </summary>
+        </member>
+        <member name="F:Easy_Logger.EasyLoggerService.Endpoints">
+            <summary>
+            Contains the individual logging endpoints
+            </summary>
+        </member>
+        <member name="M:Easy_Logger.EasyLoggerService.#ctor(Easy_Logger.Interfaces.ILoggingConfiguration)">
+            <summary>
+            Prepares the logging service for recording to logging endpoints
+            </summary>
+            <param name="loggingConfiguration">The parameters to record log records with</param>
+        </member>
+        <member name="P:Easy_Logger.EasyLoggerService.Settings">
+            <summary>
+            The configuration settings to use when recording logs
+            </summary>
+        </member>
+        <member name="M:Easy_Logger.EasyLoggerService.SaveToLog(System.String)">
+            <summary>
+            Records the provided message to the configured endpoints
+            </summary>
+            <param name="message">The text to record to the log(s)</param>
+        </member>
+        <member name="M:Easy_Logger.EasyLoggerService.SaveToLog(Easy_Logger.Interfaces.ILoggerEntry)">
+            <summary>
+            Records the provided logging entry to the configured endpoints
+            </summary>
+            <param name="loggerEntry">The data to record to the log(s)</param>
+        </member>
+        <member name="M:Easy_Logger.EasyLoggerService.AddLogger(Easy_Logger.Interfaces.ILoggerEndpoint)">
+            <summary>
+            Adds a custom logging endpoint
+            </summary>
+            <param name="logger">The endpoint to add</param>
+        </member>
+        <member name="T:Easy_Logger.EasyWebLogger">
+            <summary>
+            Class to connect <see cref="T:Microsoft.Extensions.Logging.ILogger"/> to <see cref="T:Easy_Logger.EasyLoggerService"/>
+            </summary>
+        </member>
+        <member name="M:Easy_Logger.EasyWebLogger.BeginScope``1(``0)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Easy_Logger.EasyWebLogger.IsEnabled(Microsoft.Extensions.Logging.LogLevel)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Easy_Logger.EasyWebLogger.Log``1(Microsoft.Extensions.Logging.LogLevel,Microsoft.Extensions.Logging.EventId,``0,System.Exception,System.Func{``0,System.Exception,System.String})">
+            <inheritdoc/>
+        </member>
+        <member name="T:Easy_Logger.EasyWebLogProvider">
+            <summary>
+            Creates and injects <see cref="T:Microsoft.Extensions.Logging.ILogger"/> as required
+            </summary>
+        </member>
+        <member name="M:Easy_Logger.EasyWebLogProvider.CreateLogger(System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Easy_Logger.EasyWebLogProvider.Dispose">
+            <inheritdoc/>
+        </member>
+        <member name="T:Easy_Logger.Enums.DatedSubdirectoryModes">
+            <summary>
+            Enum that specifies how text-based logging subdirectories are created
+            </summary>
+        </member>
+        <member name="F:Easy_Logger.Enums.DatedSubdirectoryModes.Hourly">
+            <summary>
+            Creates a new directory each hour (i.e. yyyy/mm/dd/hh/logfile.log)
+            </summary>
+        </member>
+        <member name="F:Easy_Logger.Enums.DatedSubdirectoryModes.Daily">
+            <summary>
+            Creates a new directory each day (i.e. yyyy/mm/dd/logfile.log)
+            </summary>
+        </member>
+        <member name="F:Easy_Logger.Enums.DatedSubdirectoryModes.Monthly">
+            <summary>
+            Creates a new directory each month (i.e. yyyy/mm/logfile.log)
+            </summary>
+        </member>
+        <member name="F:Easy_Logger.Enums.DatedSubdirectoryModes.Yearly">
+            <summary>
+            Creates a new directory each year (i.e. yyyy/logfile.log)
+            </summary>
+        </member>
+        <member name="T:Easy_Logger.Interfaces.ILoggerEndpoint">
+            <summary>
+            Defines properties and methods required to record data to a logging endpoint
+            </summary>
+        </member>
+        <member name="P:Easy_Logger.Interfaces.ILoggerEndpoint.Settings">
+            <summary>
+            The configuration object to pass to the logger
+            </summary>
+        </member>
+        <member name="M:Easy_Logger.Interfaces.ILoggerEndpoint.SaveToLog(Easy_Logger.Interfaces.ILoggerEntry)">
+            <summary>
+            Saves the provided entry to the endpoint
+            </summary>
+            <param name="loggerEntry">The data to log</param>
+        </member>
+        <member name="T:Easy_Logger.Interfaces.ILoggerEntry">
+            <summary>
+            Defines properties required by logging endpoints
+            </summary>
+        </member>
+        <member name="P:Easy_Logger.Interfaces.ILoggerEntry.Timestamp">
+            <summary>
+            The time at which the entry occurred
+            </summary>
+        </member>
+        <member name="P:Easy_Logger.Interfaces.ILoggerEntry.Tag">
+            <summary>
+            A label to identify and filter the entry (ex. Error:Invalid Input)
+            </summary>
+        </member>
+        <member name="P:Easy_Logger.Interfaces.ILoggerEntry.Message">
+            <summary>
+            The text to record to the log(s)
+            </summary>
+        </member>
+        <member name="P:Easy_Logger.Interfaces.ILoggerEntry.Severity">
+            <summary>
+            The importance of the entry
+            </summary>
+        </member>
+        <member name="T:Easy_Logger.Interfaces.ILoggingConfiguration">
+            <summary>
+            Defines properties required to configure the logging service
+            </summary>
+        </member>
+        <member name="P:Easy_Logger.Interfaces.ILoggingConfiguration.UseTextLogger">
+            <summary>
+            Specifies whether to record to text log files
+            </summary>
+        </member>
+        <member name="P:Easy_Logger.Interfaces.ILoggingConfiguration.UseJsonLogger">
+            <summary>
+            Specifies whether to record to JSON log files
+            </summary>
+        </member>
+        <member name="P:Easy_Logger.Interfaces.ILoggingConfiguration.UseSqlLogger">
+            <summary>
+            Specifies whether to record to a SQL log table
+            </summary>
+        </member>
+        <member name="P:Easy_Logger.Interfaces.ILoggingConfiguration.LogDirectory">
+            <summary>
+            The directory to save text or JSON logs to
+            </summary>
+        </member>
+        <member name="P:Easy_Logger.Interfaces.ILoggingConfiguration.LogFilename">
+            <summary>
+            The filename to save text-based logs to (may include date parts as follows: [Date:yyyy]_otherdetails_[Date:MM-dd])
+            </summary>
+        </member>
+        <member name="P:Easy_Logger.Interfaces.ILoggingConfiguration.UseDatedSubdirectory">
+            <summary>
+            Specifies whether text-based logs should store logs in dated subdirectories (ex. /logfolder/2020/05/01/logfile.txt)
+            </summary>
+        </member>
+        <member name="P:Easy_Logger.Interfaces.ILoggingConfiguration.DatedSubdirectoryMode">
+            <summary>
+            The level of dated subdirectory to use
+            </summary>
+        </member>
+        <member name="P:Easy_Logger.Interfaces.ILoggingConfiguration.LogSqlTable">
+            <summary>
+            The name of the SQL table to store log data in
+            </summary>
+        </member>
+        <member name="P:Easy_Logger.Interfaces.ILoggingConfiguration.SqlConnectionString">
+            <summary>
+            The text to use to connect to the SQL database
+            </summary>
+        </member>
+        <member name="T:Easy_Logger.Loggers.FileLoggerBase">
+            <summary>
+            Base class that provides methods to assist with text-based logging endpoints (ex. .txt or .json)
+            </summary>
+        </member>
+        <member name="M:Easy_Logger.Loggers.FileLoggerBase.#ctor(Easy_Logger.Interfaces.ILoggingConfiguration)">
+            <summary>
+            Prepares the file and directory naming systems
+            </summary>
+            <param name="loggingConfiguration">The settings to use with the endpoint</param>
+            <exception cref="T:System.ArgumentException"></exception>
+            <exception cref="T:System.ArgumentNullException"></exception>
+        </member>
+        <member name="M:Easy_Logger.Loggers.FileLoggerBase.GetTextLogDirectory(System.DateTime,Easy_Logger.Interfaces.ILoggingConfiguration)">
+            <summary>
+            Returns the directory to save logs within after applying any required date based folders
+            </summary>
+            <param name="date">The date to store the log</param>
+            <param name="loggingConfiguration">The settings to use with the endpoint</param>
+        </member>
+        <member name="M:Easy_Logger.Loggers.FileLoggerBase.GetTextLogFilename(System.DateTime,Easy_Logger.Interfaces.ILoggingConfiguration)">
+            <summary>
+            Returns the filename to save logs under after applying any required date based filenaming
+            </summary>
+            <param name="date">The date to store the log</param>
+            <param name="loggingConfiguration">The settings to use with the endpoint</param>
+        </member>
+        <member name="T:Easy_Logger.Loggers.JsonLogger">
+            <summary>
+            Logging endpoint that records to JSON files
+            </summary>
+        </member>
+        <member name="P:Easy_Logger.Loggers.JsonLogger.Settings">
+            <inheritdoc/>
+        </member>
+        <member name="M:Easy_Logger.Loggers.JsonLogger.SaveToLog(Easy_Logger.Interfaces.ILoggerEntry)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Easy_Logger.Loggers.JsonLogger.SaveToLog(System.String,Easy_Logger.Interfaces.ILoggerEntry,System.Int32)">
+            <summary>
+            Saves the provided entry to the endpoint
+            </summary>
+            <param name="path">The full path to store the entry</param>
+            <param name="entry">The log data to record</param>
+            <param name="retries">The number of times to retry on failure</param>
+        </member>
+        <member name="T:Easy_Logger.Loggers.SqlLogger">
+            <summary>
+            Logging endpoint that records to a SQL database
+            </summary>
+        </member>
+        <member name="M:Easy_Logger.Loggers.SqlLogger.#ctor(Easy_Logger.Interfaces.ILoggingConfiguration)">
+            <summary>
+            Prepares the logger for adding data to a SQL database
+            </summary>
+            <param name="loggingConfiguration">The settings to use with the logger</param>
+            <exception cref="T:System.ArgumentNullException"></exception>
+        </member>
+        <member name="P:Easy_Logger.Loggers.SqlLogger.Settings">
+            <inheritdoc/>
+        </member>
+        <member name="M:Easy_Logger.Loggers.SqlLogger.SaveToLog(Easy_Logger.Interfaces.ILoggerEntry)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Easy_Logger.Loggers.SqlLogger.SetColumnNames(Easy_Logger.Interfaces.ILoggerEntry)">
+            <summary>
+            Retrieves the column names to use when saving log data to SQL
+            </summary>
+            <param name="loggerEntry">The entry to save to SQL</param>
+        </member>
+        <member name="T:Easy_Logger.Loggers.TextLogger">
+            <summary>
+            Logging endpoint that records to text files
+            </summary>
+        </member>
+        <member name="P:Easy_Logger.Loggers.TextLogger.Settings">
+            <inheritdoc/>
+        </member>
+        <member name="M:Easy_Logger.Loggers.TextLogger.SaveToLog(Easy_Logger.Interfaces.ILoggerEntry)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Easy_Logger.Loggers.TextLogger.SaveToLog(System.String,System.String,System.Int32)">
+            <summary>
+            Saves the provided entry to the endpoint
+            </summary>
+            <param name="path">The full path to store the entry</param>
+            <param name="entry">The log data to record</param>
+            <param name="retries">The number of times to retry on failure</param>
+        </member>
+        <member name="M:Easy_Logger.Loggers.TextLogger.OverridesToString(System.Object)">
+            <summary>
+            Checks to see whether the provided object has a ToString() override method
+            </summary>
+            <param name="instance">The object to check</param>
+        </member>
+        <member name="T:Easy_Logger.Models.LoggerEntry">
+            <summary>
+            Default implementation of <see cref="T:Easy_Logger.Interfaces.ILoggerEntry"/>
+            </summary>
+        </member>
+        <member name="P:Easy_Logger.Models.LoggerEntry.Timestamp">
+            <inheritdoc/>
+        </member>
+        <member name="P:Easy_Logger.Models.LoggerEntry.Tag">
+            <inheritdoc/>
+        </member>
+        <member name="P:Easy_Logger.Models.LoggerEntry.Message">
+            <inheritdoc/>
+        </member>
+        <member name="P:Easy_Logger.Models.LoggerEntry.Severity">
+            <inheritdoc/>
+        </member>
+        <member name="M:Easy_Logger.Models.LoggerEntry.ToString">
+            <inheritdoc/>
+        </member>
+        <member name="T:Easy_Logger.Models.LoggingConfiguration">
+            <summary>
+            Default implementation of <see cref="T:Easy_Logger.Interfaces.ILoggingConfiguration"/>
+            </summary>
+        </member>
+        <member name="P:Easy_Logger.Models.LoggingConfiguration.UseTextLogger">
+            <inheritdoc/>
+        </member>
+        <member name="P:Easy_Logger.Models.LoggingConfiguration.UseJsonLogger">
+            <inheritdoc/>
+        </member>
+        <member name="P:Easy_Logger.Models.LoggingConfiguration.UseSqlLogger">
+            <inheritdoc/>
+        </member>
+        <member name="P:Easy_Logger.Models.LoggingConfiguration.LogDirectory">
+            <inheritdoc/>
+        </member>
+        <member name="P:Easy_Logger.Models.LoggingConfiguration.LogFilename">
+            <inheritdoc/>
+        </member>
+        <member name="P:Easy_Logger.Models.LoggingConfiguration.UseDatedSubdirectory">
+            <inheritdoc/>
+        </member>
+        <member name="P:Easy_Logger.Models.LoggingConfiguration.DatedSubdirectoryMode">
+            <inheritdoc/>
+        </member>
+        <member name="P:Easy_Logger.Models.LoggingConfiguration.LogSqlTable">
+            <inheritdoc/>
+        </member>
+        <member name="P:Easy_Logger.Models.LoggingConfiguration.SqlConnectionString">
+            <inheritdoc/>
+        </member>
+        <member name="T:Easy_Logger.SqlServerService">
+            <summary>
+            Provides methods to easily facilitate SQL functions
+            </summary>
+        </member>
+        <member name="M:Easy_Logger.SqlServerService.#ctor(System.String)">
+            <summary>
+            Prepares the class to run SQL queries
+            </summary>
+            <param name="connectionString">The details to connect to the database with</param>
+        </member>
+        <member name="M:Easy_Logger.SqlServerService.#ctor(System.Data.SqlClient.SqlConnectionStringBuilder)">
+            <summary>
+            Prepares the class to run SQL queries
+            </summary>
+            <param name="connectionString">The details to connect to the database with</param>
+        </member>
+        <member name="M:Easy_Logger.SqlServerService.#ctor(System.String,System.String,System.String,System.String,System.Boolean)">
+            <summary>
+            Prepares the class to run SQL queries
+            </summary>
+            <param name="server">The DNS name or IP address of the server to connect to</param>
+            <param name="database">The name of the database to run queries against</param>
+            <param name="username">The username to access the server</param>
+            <param name="password">The password to access the server</param>
+            <param name="integratedSecurity">If true will ignore username and password and use Windows integrated security</param>
+        </member>
+        <member name="M:Easy_Logger.SqlServerService.ExecuteReader(System.String,System.Collections.Generic.List{System.Data.SqlClient.SqlParameter},System.Data.CommandType)">
+            <summary>
+            Sends the provided SQL text to the database in an ExecuteReader command
+            </summary>
+            <param name="sql">The query text to run</param>
+            <param name="parameters">Parameters to apply to the query</param>
+            <param name="commandType">The type of query to run</param>
+            <exception cref="T:System.Data.DataException"></exception>
+        </member>
+        <member name="M:Easy_Logger.SqlServerService.ExecuteAdapter(System.String,System.Collections.Generic.List{System.Data.SqlClient.SqlParameter},System.Data.CommandType)">
+            <summary>
+            Sends the provided SQL text to the database in an ExecuteAdapter command
+            </summary>
+            <param name="sql">The query text to run</param>
+            <param name="parameters">Parameters to apply to the query</param>
+            <param name="commandType">The type of query to run</param>
+            <exception cref="T:System.Data.DataException"></exception>
+        </member>
+        <member name="M:Easy_Logger.SqlServerService.ExecuteScalar(System.String,System.Collections.Generic.List{System.Data.SqlClient.SqlParameter},System.Data.CommandType)">
+            <summary>
+            Sends the provided SQL text to the database in an ExecuteScalar command
+            </summary>
+            <param name="sql">The query text to run</param>
+            <param name="parameters">Parameters to apply to the query</param>
+            <param name="commandType">The type of query to run</param>
+            <exception cref="T:System.Data.DataException"></exception>
+        </member>
+        <member name="M:Easy_Logger.SqlServerService.ExecuteNonQuery(System.String,System.Collections.Generic.List{System.Data.SqlClient.SqlParameter},System.Data.CommandType)">
+            <summary>
+            Sends the provided SQL text to the database in an ExecuteNonQuery command
+            </summary>
+            <param name="sql">The query text to run</param>
+            <param name="parameters">Parameters to apply to the query</param>
+            <param name="commandType">The type of query to run</param>
+            <exception cref="T:System.Data.DataException"></exception>
+        </member>
+        <member name="M:Easy_Logger.SqlServerService.Prepare(System.String,System.Collections.Generic.List{System.Data.SqlClient.SqlParameter},System.Data.CommandType)">
+            <summary>
+            Prepares a query to be run on the database
+            </summary>
+            <param name="sql">The query text to run</param>
+            <param name="parameters">Parameters to apply to the query</param>
+            <param name="commandType">The type of query to run</param>
+        </member>
+        <member name="M:Easy_Logger.SqlServerService.Cleanup(System.Collections.Generic.List{System.Data.SqlClient.SqlParameter})">
+            <summary>
+            Disposes of active objects and clears provided parameters
+            </summary>
+            <param name="parameters">Parameters to apply to the query</param>
+        </member>
+    </members>
+</doc>
