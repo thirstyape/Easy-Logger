@@ -33,9 +33,6 @@ namespace Easy_Logger
 
             if (Settings.UseJsonLogger)
                 Endpoints.Add(new JsonLogger(Settings));
-
-            if (Settings.UseSqlLogger)
-                Endpoints.Add(new SqlLogger(Settings));
         }
 
         /// <summary>
