@@ -7,7 +7,7 @@ namespace Easy_Logger.Models
     /// <summary>
     /// Default implementation of <see cref="ILoggerEntry"/>
     /// </summary>
-    public class LoggerEntry : ILoggerEntry
+    internal class LoggerEntry : ILoggerEntry
     {
         public LoggerEntry()
         {
@@ -23,12 +23,15 @@ namespace Easy_Logger.Models
         public DateTime Timestamp { get; set; } = DateTime.Now;
 
         /// <inheritdoc/>
-        public string? Tag { get; set; }
+        public string? Source { get; set; }
 
         /// <inheritdoc/>
         public string Message { get; set; }
 
         /// <inheritdoc/>
-        public LogLevel Severity { get; set; } = LogLevel.Information;
+        public LogLevel Severity { get; set; }
+
+        /// <inheritdoc/>
+        public EventId? Id { get; set; }
     }
 }

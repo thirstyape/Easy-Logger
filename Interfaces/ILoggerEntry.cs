@@ -14,9 +14,9 @@ namespace Easy_Logger.Interfaces
         public DateTime Timestamp { get; }
 
         /// <summary>
-        /// A label to identify and filter the entry (ex. Error:Invalid Input)
+        /// The source that produced the log entry
         /// </summary>
-        public string? Tag { get; }
+        public string? Source { get; }
 
         /// <summary>
         /// The text to record to the log(s)
@@ -27,5 +27,10 @@ namespace Easy_Logger.Interfaces
         /// The importance of the entry
         /// </summary>
         LogLevel Severity { get; }
+
+        /// <summary>
+        /// Stores the Event ID passed to the logging function
+        /// </summary>
+        EventId? Id { get; }
     }
 }
