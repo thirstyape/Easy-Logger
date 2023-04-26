@@ -6,13 +6,19 @@ The default implementation is capable of:
 
 - Recording to text log files
 - Recording to JSON log files
-- Recording to SQL databases
-- Adding dated folders to text-based logs (ex. /logs/2020/05/01/log.log)
-- Adding dated filenames to text-based logs (ex. /logs/2020-05-01.log)
-- Adding custom column names to SQL based logs
+- Recording to an in-memory dictionary
+- Recording to the console
+- Adding dated folders to text-based logs (ex. /logs/2020/05/01/log.txt)
+- Adding templated filenames to text-based logs (ex. /logs/2020-05-01_My.Namespace_Log_150059.txt)
 - Being used as an ILogger implementation for ASP.NET and other API type applications
 
-This can also be extended to record logs via custom logging endpoints.
+## Breaking Changes V2.0
+
+**Notice!**
+
+If you have been using V1 based editions of this library, please use the Version 1.X branch to ensure you do not encounter breaking changes. It is no longer being developed, but if there are security concerns they will be addressed.
+
+The V2 edition has been released to provide a more standards based logging system. The loggers and providers are now using the default `ILogger` and `ILoggerProvider` implementations. It is recommended to register your required loggers using the providers and then using dependency injection to get `ILogger` instances as required. You can still directly create loggers if required.
 
 ## Getting Started
 
@@ -24,164 +30,103 @@ To use this library either clone a copy of the repository or check out the [NuGe
 
 ### Usage
 
-**Basic Example**
+**Recommended Example**
 
-The following example provides a complete use case.
+The following provides an example of the recommended usage. 
+
+In this example both the text logger and console loggers are configured, so any log messages will be recorded to both. The text logger is configured using a custom formatter that will be applied as logs are saved to the text files; whereas the console logger has not been configured using a custom formatter, so the default formatter will be used.
+
+Program.cs or configuration class
+```
+var builder = WebApplication.CreateBuilder();
+
+var logLevels = new[] { LogLevel.Trace, LogLevel.Debug, LogLevel.Information, LogLevel.Warning, LogLevel.Error, LogLevel.Critical };
+var ignoredMessages = new List<string>() { "TaskCanceledException" };
+
+builder.Logging
+    .ClearProviders()
+    .AddTextLogger(options =>
+    {
+        options.LogLevels = logLevels;
+        options.IgnoredMessages = ignoredMessages;
+        options.LogDirectory = Path.Combine(AppContext.BaseDirectory, "Logs");
+        options.LogfileNameTemplate = "[Date:yyyy]-myapplog-[Date:MM-dd_HH]";
+        options.SubdirectoryMode = DatedSubdirectoryModes.Daily;
+
+        options.Formatter = entry =>
+        {
+            return $"{entry.Timestamp:yyyy-MM-dd HH:mm:ss.fff}; Severity={entry.Severity}; Source={entry.Source}; Text={entry.Message}";
+        };
+    })
+    .AddConsoleLogger(options => 
+    {
+        options.LogLevels = logLevels;
+        options.IgnoredMessages = ignoredMessages;
+
+        options.LogLevelToColorMap = new Dictionary<LogLevel, ConsoleColor>()
+        {
+            [LogLevel.Trace] = ConsoleColor.Cyan,
+            [LogLevel.Debug] = ConsoleColor.Blue,
+            [LogLevel.Information] = ConsoleColor.Green,
+            [LogLevel.Warning] = ConsoleColor.Yellow,
+            [LogLevel.Error] = ConsoleColor.Red,
+            [LogLevel.Critical] = ConsoleColor.Magenta
+        };
+    });
+```
+
+Controller or other service
+```
+public sealed class InfoController : ControllerBase 
+{
+    private readonly ILogger logger;
+
+    public InfoController(ILogger<InfoController> logger) 
+    {
+        this.logger = logger;
+    }
+
+    [HttpGet]
+    [ProducesResponseType(typeof(IApiResponse<bool>), StatusCodes.Status200OK)]
+    public IActionResult Test() 
+    {
+        logger.LogInformation($"{nameof(Test)} function queried.");
+        return Ok(true);
+    }
+}
+```
+
+**Per-Message Formatting Example**
+
+The following provides an example of customizing the formatting for a single message. The per-message formatting is applied to the ILoggerEntry.Message property; if the configuration for the logger has a global formatter, that will be applied afterwards.
+
+```
+public void Test(string? message)
+{
+    try 
+    {
+        if (string.IsNullOrWhitespace(message))
+            throw new ArgumentException("must provide a message", nameof(message));
+
+        logger.Log(LogLevel.Information, new EventId(), message, null, (state, exception) => $"{nameof(Test)} function succeeded with message {state}.");
+    }
+    catch (Exception e)
+    {
+        logger.Log<object?>(LogLevel.Error, new EventId(12345), null, e, (state, exception) => $"{nameof(Test)} function failed with {exception.GetType().Name} {exception.Message}.");
+    }
+}
+```
+
+**Direct Example**
+
+The following provides an example of using a logger directly.
 
 ```
 Console.WriteLine("Enter a message to log:");
 var message = Console.ReadLine();
 
-var logger = new EasyLoggerService(new LoggingConfiguration());
-
-logger.SaveToLog(input);
-
-```
-
-**Using custom configuration**
-
-In the previous example, the call to ```new LoggingConfiguration()``` was done inline in the service setup. This example makes use of the most basic configuration. However, it can be prepared beforehand and the logger will use different settings or you can create your own using ```ILoggingConfiguration```.
-
-```
-var configuration = new LoggingConfiguration()
-{
-    UseTextLogger = false,
-    UseJsonLogger = true,
-    UseDatedSubdirectory = false, 
-    LogFilename = "[Date:yyyy]-myapplog-[Date:MM-dd_HH]"
-};
-
-var logger = new EasyLoggerService(configuration);
-```
-
-**Adding A Custom Logging Endpoint**
-
-The system also supports adding your own logging endpoints that will run with the built-in ones. This is done by using ```ILoggerEndpoint```.
-
-The sample tester class.
-
-```
-public class ConsoleLogger : ILoggerEndpoint
-{
-    public ConsoleLogger(ILoggingConfiguration loggingConfiguration)
-    {
-        Settings = loggingConfiguration;
-    }
-
-    public ILoggingConfiguration Settings { get; set; }
-
-    public bool SaveToLog(ILoggerEntry loggerEntry)
-    {
-        var message = $"Received new log message: {loggerEntry.Message}" + Environment.NewLine +
-            $"  at {loggerEntry.Timestamp}" + Environment.NewLine +
-            $"  with tag {loggerEntry.Tag}" + Environment.NewLine +
-            $"  and severity {loggerEntry.Severity}" + Environment.NewLine;
-
-        Console.WriteLine(message);
-
-        return true;
-    }
-}
-```
-
-Adding to logging service.
-
-```
-var configuration = new LoggingConfiguration();
-var logger = new EasyLoggerService(configuration);
-
-logger.AddLogger(new ConsoleLogger(configuration));
-logger.SaveToLog(input);
-```
-
-**Adding A Custom Log Entry Class**
-
-The system also supports adding your own class to contain log entry data. This provides the benefits of allowing your custom endpoints to consume custom data as well as allowing use of custom formats for the built in text logging endpoint.
-
-In the built in text logging endpoint the system checks for an override of ```ToString()``` and when found will use that to construct the message that is saved to the log file.
-
-The sample entry class.
-
-```
-public class MyCustomLoggerEntry : ILoggerEntry
-{
-    public DateTime Timestamp { get; set; }
-    public string Tag { get; set; }
-    public string Message { get; set; }
-    public LogLevel Severity { get; set; }
-
-    public string MyExtraData { get; set; }
-    public double MyExtraNumber { get; set; }
-
-    public override string ToString()
-    {
-        return $"{Timestamp},{Message},{Severity},{MyExtraData},{MyExtraNumber}" + Environment.NewLine;
-    }
-}
-```
-
-Adding to logging service.
-
-```
-var logger = new EasyLoggerService(new LoggingConfiguration());
-
-var entry = new MyCustomLoggerEntry()
-{
-    Timestamp = DateTime.Now,
-    Message = input,
-    Severity = LogLevel.Warning,
-    MyExtraData = "Cool extra data",
-    MyExtraNumber = 7.5
-};
-
-logger.SaveToLog(entry);
-```
-
-**Using Custom SQL Column Mappings**
-
-The system supports mapping the SQL logs to custom columns that have different names or even data types than the built in values.
-
-To do so, build a custom log entry class as specified above and annotate the properties with the ```ColumnAttribute``` as follows.
-
-```
-public class MyCustomLoggerEntry : ILoggerEntry
-{
-    [Column("MyCustomTimestampColumn")]
-    public DateTime Timestamp { get; set; }
-
-    [Column("MyCustomTagColumn")]
-    public string Tag { get; set; }
-
-    [Column("MyCustomMessageColumn")]
-    public string Message { get; set; }
-
-    [Column("MyCustomSeverityColumn")]
-    public LogLevel Severity { get; set; }
-}
-```
-
-**Using in ASP.NET or a Web API**
-
-There are two additional classes that integrate the Easy Logger Service with ASP.NET based projects.
-
-To use with such a project simply use the ```EasyWebLogProvider``` class in your ```ConfigureServices()``` method as follows.
-
-```
-public void ConfigureServices(IServiceCollection services) {
-    // Your other startup stuff
-
-    var loggingConfiguration = new LoggingConfiguration() {
-        LogDirectory = "C:\\MyLogDirectory"
-    };
-
-    var logLevels = new LogLevel[] { LogLevel.Warning, LogLevel.Error, LogLevel.Critical };
-
-    services.AddLogging(logging => 
-    {
-        logging.ClearProviders();
-        logging.AddProvider(new EasyWebLogProvider(loggingConfiguration, logLevels));
-    });
-}
+var logger = new ConsoleLogger("", () => new LogLevel[] { LogLevel.Information, LogLevel.Warning }, new List<string>() { "TaskCanceledException" }, new Dictionary<LogLevel, ConsoleColor>());
+logger.LogInformation(input);
 ```
 
 ## Authors

@@ -1,97 +1,87 @@
-﻿using Easy_Logger.Interfaces;
-
+﻿using Easy_Logger.Enums;
+using Easy_Logger.Models;
+using Easy_Logger.Providers;
+using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
 using System.IO;
-using System.Threading.Tasks;
+using System.Linq;
 
 namespace Easy_Logger.Loggers
 {
     /// <summary>
     /// Logging endpoint that records to text files
     /// </summary>
-    public class TextLogger : FileLoggerBase, ILoggerEndpoint
+    public class TextLogger : FileLoggerBase, ILogger
     {
-        public TextLogger(ILoggingConfiguration loggingConfiguration) : base(loggingConfiguration)
+        private readonly Func<TextLoggerConfiguration> Configuration;
+
+        /// <param name="source">Stores the source for the logger</param>
+        /// <param name="configuration">A function to return the configuration for the logger</param>
+        public TextLogger(string source, Func<TextLoggerConfiguration> configuration) : base(source, configuration)
         {
-            Settings = loggingConfiguration;
+            Configuration = configuration;
+        }
+
+        /// <param name="source">Stores the source for the logger</param>
+        /// <param name="logLevels">A function to return the log levels to record log entries for</param>
+        /// <param name="ignoredMessages">Any log messages containing these strings will not be recorded</param>
+        /// <param name="logDirectory">The top-level file system directory to save geneated log files into</param>
+        /// <param name="logfileNameTemplate">The template to generate the filename to save logs to</param>
+        /// <param name="subdirectoryMode">Specifies how to create dated subdirectories under the log directory</param>
+        public TextLogger(string source, Func<LogLevel[]> logLevels, List<string> ignoredMessages, string logDirectory, string logfileNameTemplate, DatedSubdirectoryModes subdirectoryMode) : base(source, logLevels, ignoredMessages, logDirectory, logfileNameTemplate, subdirectoryMode)
+        {
+            Configuration = () => new TextLoggerConfiguration()
+            {
+                LogLevels = logLevels(),
+                IgnoredMessages = ignoredMessages,
+                LogDirectory = logDirectory,
+                LogfileNameTemplate = logfileNameTemplate,
+                SubdirectoryMode = subdirectoryMode
+            };
         }
 
         /// <inheritdoc/>
-        public ILoggingConfiguration Settings { get; set; }
+        public IDisposable BeginScope<TState>(TState state) => default!;
 
         /// <inheritdoc/>
-        public bool SaveToLog(ILoggerEntry loggerEntry)
+        public bool IsEnabled(LogLevel logLevel) => Configuration().LogLevels.Contains(logLevel);
+
+        /// <inheritdoc/>
+        public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception? exception, Func<TState, Exception?, string> formatter)
         {
-            var directory = GetTextLogDirectory(loggerEntry.Timestamp, Settings);
-            var filename = GetTextLogFilename(loggerEntry.Timestamp, Settings);
+            if (IsEnabled(logLevel) == false)
+                return;
 
-            var path = Path.Combine(directory, $"{filename}.txt");
+            var entry = new LoggerEntry(formatter(state, exception))
+            {
+                Id = eventId,
+                Severity = logLevel,
+                Source = Source
+            };
 
-            string message;
+            if (Configuration().IgnoredMessages.Any(x => entry.Message.Contains(x, StringComparison.OrdinalIgnoreCase)))
+                return;
 
-            if (OverridesToString(loggerEntry))
-                message = loggerEntry.ToString();
+            string text;
+
+            if (Configuration().Formatter == null)
+                text = $"{entry.Timestamp:yyyy-MM-dd HH:mm:ss.fff}; Severity={entry.Severity}; Source={entry.Source}; Text={entry.Message.Replace(";", "").Replace("=", "")}";
             else
-                message = $"{loggerEntry.Timestamp:yyyy-MM-dd HH:mm:ss.fff} " +
-                    $"Severity :: {loggerEntry.Severity} ;; " +
-                    $"{loggerEntry.Tag} :: {loggerEntry.Message} ;; " +
-                    Environment.NewLine;
+                text = Configuration().Formatter!.Invoke(entry);
 
-            SaveToLog(path, message);
-
-            return true;
-        }
-
-        /// <summary>
-        /// Saves the provided entry to the endpoint
-        /// </summary>
-        /// <param name="path">The full path to store the entry</param>
-        /// <param name="entry">The log data to record</param>
-        /// <param name="retries">The number of times to retry on failure</param>
-        private void SaveToLog(string path, string entry, int retries = 3)
-        {
             try
             {
-                // Write to log
+                var directory = GetTextLogDirectory(entry.Timestamp);
+                var path = Path.Combine(directory, GetTextLogFilename(entry.Timestamp), ".txt");
+
+                Directory.CreateDirectory(directory);
+
                 using var writer = new StreamWriter(File.Open(path, FileMode.Append));
-                writer.WriteLine(entry);
+                writer.WriteLine(text);
+                writer.Close();
             }
-            catch
-            {
-                // Check for out of tries
-                if (retries == 0)
-                    throw;
-
-                // Delay and try again
-                int delay;
-
-                if (retries >= 3)
-                    delay = 100;
-                else if (retries == 2)
-                    delay = 500;
-                else
-                    delay = 1_000;
-
-                Task.Delay(delay).Wait();
-
-                SaveToLog(path, entry, --retries);
-            }
-        }
-
-        private delegate string ToStringDelegate();
-
-        /// <summary>
-        /// Checks to see whether the provided object has a ToString() override method
-        /// </summary>
-        /// <param name="instance">The object to check</param>
-        private bool OverridesToString(object instance)
-        {
-            if (instance == null)
-                return false;
-
-            ToStringDelegate test = instance.ToString;
-
-            return test.Method.DeclaringType == instance.GetType();
+            catch { }
         }
     }
 }
