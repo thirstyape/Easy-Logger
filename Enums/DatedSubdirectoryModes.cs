@@ -6,6 +6,11 @@
     public enum DatedSubdirectoryModes
     {
         /// <summary>
+        /// Does not create new directories based on time
+        /// </summary>
+        None,
+
+        /// <summary>
         /// Creates a new directory each hour (i.e. yyyy/mm/dd/hh/logfile.log)
         /// </summary>
         Hourly,

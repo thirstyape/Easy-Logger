@@ -1,81 +1,50 @@
-﻿using Easy_Logger.Interfaces;
-
+﻿using Easy_Logger.Enums;
+using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
 using System.IO;
-using System.Threading.Tasks;
+using System.Linq;
 
 namespace Easy_Logger.Loggers
 {
     /// <summary>
     /// Logging endpoint that records to text files
     /// </summary>
-    public class TextLogger : FileLoggerBase, ILoggerEndpoint
+    public class TextLogger : FileLoggerBase, ILogger
     {
-        public TextLogger(ILoggingConfiguration loggingConfiguration) : base(loggingConfiguration)
-        {
-            Settings = loggingConfiguration;
-        }
+        public TextLogger(string source, Func<LogLevel[]> logLevels, List<string> ignoredMessages, string logDirectory, string logfileNameTemplate, DatedSubdirectoryModes subdirectoryMode) : base(source, logLevels, ignoredMessages, logDirectory, logfileNameTemplate, subdirectoryMode) { }
 
         /// <inheritdoc/>
-        public ILoggingConfiguration Settings { get; set; }
+        public IDisposable BeginScope<TState>(TState state) => default!;
 
         /// <inheritdoc/>
-        public bool SaveToLog(ILoggerEntry loggerEntry)
+        public bool IsEnabled(LogLevel logLevel) => LogLevels().Contains(logLevel);
+
+        /// <inheritdoc/>
+        public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception? exception, Func<TState, Exception?, string> formatter)
         {
-            var directory = GetTextLogDirectory(loggerEntry.Timestamp, Settings);
-            var filename = GetTextLogFilename(loggerEntry.Timestamp, Settings);
+            if (IsEnabled(logLevel) == false)
+                return;
 
-            var path = Path.Combine(directory, $"{filename}.txt");
+            var now = DateTime.Now;
+            var content = formatter(state, exception).Replace(";", "").Replace("=", "");
+            var text = $"{now:yyyy-MM-dd HH:mm:ss.fff}; Severity={logLevel}; Source={Source}; Text={content}";
 
-            string message;
+            if (IgnoredMessages.Any(x => content.Contains(x, StringComparison.OrdinalIgnoreCase)))
+                return;
 
-            if (OverridesToString(loggerEntry))
-                message = loggerEntry.ToString();
-            else
-                message = $"{loggerEntry.Timestamp:yyyy-MM-dd HH:mm:ss.fff} " +
-                    $"Severity :: {loggerEntry.Severity} ;; " +
-                    $"{loggerEntry.Tag} :: {loggerEntry.Message} ;; " +
-                    Environment.NewLine;
-
-            SaveToLog(path, message);
-
-            return true;
-        }
-
-        /// <summary>
-        /// Saves the provided entry to the endpoint
-        /// </summary>
-        /// <param name="path">The full path to store the entry</param>
-        /// <param name="entry">The log data to record</param>
-        /// <param name="retries">The number of times to retry on failure</param>
-        private void SaveToLog(string path, string entry, int retries = 3)
-        {
             try
             {
-                // Write to log
+                var directory = GetTextLogDirectory(now);
+                var path = Path.Combine(directory, GetTextLogFilename(now), ".txt");
+
+                Directory.CreateDirectory(directory);
+
                 using var writer = new StreamWriter(File.Open(path, FileMode.Append));
-                writer.WriteLine(entry);
+                writer.WriteLine(text);
+                writer.Close();
             }
-            catch
-            {
-                // Check for out of tries
-                if (retries == 0)
-                    throw;
-
-                // Delay and try again
-                int delay;
-
-                if (retries >= 3)
-                    delay = 100;
-                else if (retries == 2)
-                    delay = 500;
-                else
-                    delay = 1_000;
-
-                Task.Delay(delay).Wait();
-
-                SaveToLog(path, entry, --retries);
-            }
+            catch { }
         }
 
         private delegate string ToStringDelegate();

@@ -1,9 +1,9 @@
 ﻿using Easy_Logger.Enums;
-using Easy_Logger.Interfaces;
-
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace Easy_Logger.Loggers
@@ -13,39 +13,36 @@ namespace Easy_Logger.Loggers
     /// </summary>
     public abstract class FileLoggerBase
     {
-        protected readonly Dictionary<string, string> FilenameDateParts;
+        protected readonly string Source;
+        protected readonly Func<LogLevel[]> LogLevels;
+        protected readonly List<string> IgnoredMessages;
 
-        /// <summary>
-        /// Prepares the file and directory naming systems
-        /// </summary>
-        /// <param name="loggingConfiguration">The settings to use with the endpoint</param>
-        /// <exception cref="ArgumentException"></exception>
-        /// <exception cref="ArgumentNullException"></exception>
-        protected FileLoggerBase(ILoggingConfiguration loggingConfiguration)
+        private readonly string LogDirectory;
+        private readonly string LogfileNameTemplate;
+        private readonly DatedSubdirectoryModes SubdirectoryMode;
+
+        private readonly Dictionary<string, string> FilenameDateParts;
+
+        protected FileLoggerBase(string source, Func<LogLevel[]> logLevels, List<string> ignoredMessages, string logDirectory, string logfileNameTemplate, DatedSubdirectoryModes subdirectoryMode)
         {
-            // Validate inputs
-            if (string.IsNullOrWhiteSpace(loggingConfiguration.LogDirectory))
-                throw new ArgumentNullException(nameof(loggingConfiguration.LogDirectory), "Must provide directory to store text-based logs");
+            Source = source;
+            LogLevels = logLevels;
+            IgnoredMessages = ignoredMessages;
 
-            if (string.IsNullOrWhiteSpace(loggingConfiguration.LogFilename))
-                throw new ArgumentNullException(nameof(loggingConfiguration.LogFilename), "Must provide filename to save text-based logs under");
-
-            // Prepare directory and file name dictionary
-            var dateParts = Regex.Matches(loggingConfiguration.LogFilename, @"\[Date:[dfgmsyFHM_-]+\]");
-
-            if (dateParts.Count == 0 && Regex.IsMatch(loggingConfiguration.LogFilename, @"[a-zA-Z0-9 \._-]+") == false)
-                throw new ArgumentException("Invalid log filename specified", nameof(loggingConfiguration.LogFilename));
-
-            Directory.CreateDirectory(loggingConfiguration.LogDirectory);
+            LogDirectory = logDirectory;
+            LogfileNameTemplate = logfileNameTemplate;
+            SubdirectoryMode = subdirectoryMode;
 
             FilenameDateParts = new Dictionary<string, string>();
 
-            foreach (Match match in dateParts)
+            var dateParts = Regex.Matches(LogfileNameTemplate, @"\[Date:[dfgmsyFHM_-]+\]");
+
+            foreach (var match in dateParts.Cast<Match>())
             {
                 if (FilenameDateParts.ContainsKey(match.Value))
                     continue;
 
-                FilenameDateParts.Add(match.Value, match.Value.Split(':')[1].TrimEnd(']'));
+                FilenameDateParts.Add(match.Value, match.Value.Split(':').Last().TrimEnd(']'));
             }
         }
 
@@ -53,29 +50,21 @@ namespace Easy_Logger.Loggers
         /// Returns the directory to save logs within after applying any required date based folders
         /// </summary>
         /// <param name="date">The date to store the log</param>
-        /// <param name="loggingConfiguration">The settings to use with the endpoint</param>
-        protected string GetTextLogDirectory(DateTime date, ILoggingConfiguration loggingConfiguration)
+        protected string GetTextLogDirectory(DateTime date)
         {
-            if (loggingConfiguration.UseDatedSubdirectory == false)
-                return loggingConfiguration.LogDirectory;
-
-            var year = date.Year;
+            var year = date.Year.ToString();
             var month = date.Month.ToString().PadLeft(2, '0');
             var day = date.Day.ToString().PadLeft(2, '0');
             var hour = date.Hour.ToString().PadLeft(2, '0');
 
-            var subdirectory = loggingConfiguration.DatedSubdirectoryMode switch
+            var directory = SubdirectoryMode switch
             {
-                DatedSubdirectoryModes.Hourly => $"{year}\\{month}\\{day}\\{hour}",
-                DatedSubdirectoryModes.Daily => $"{year}\\{month}\\{day}",
-                DatedSubdirectoryModes.Monthly => $"{year}\\{month}",
-                DatedSubdirectoryModes.Yearly => year.ToString(),
-                _ => null,
+                DatedSubdirectoryModes.Hourly => Path.Combine(LogDirectory, year, month, day, hour),
+                DatedSubdirectoryModes.Daily => Path.Combine(LogDirectory, year, month, day),
+                DatedSubdirectoryModes.Monthly => Path.Combine(LogDirectory, year, month),
+                DatedSubdirectoryModes.Yearly => Path.Combine(LogDirectory, year),
+                _ => LogDirectory
             };
-
-            var directory = Path.Combine(loggingConfiguration.LogDirectory, subdirectory);
-
-            Directory.CreateDirectory(directory);
 
             return directory;
         }
@@ -84,15 +73,14 @@ namespace Easy_Logger.Loggers
         /// Returns the filename to save logs under after applying any required date based filenaming
         /// </summary>
         /// <param name="date">The date to store the log</param>
-        /// <param name="loggingConfiguration">The settings to use with the endpoint</param>
-        protected string GetTextLogFilename(DateTime date, ILoggingConfiguration loggingConfiguration)
+        protected string GetTextLogFilename(DateTime date)
         {
-            var filename = loggingConfiguration.LogFilename;
+            var filename = LogfileNameTemplate.Replace("[Source]", Source);
 
             foreach (var part in FilenameDateParts)
                 filename = filename.Replace(part.Key, date.ToString(part.Value));
 
-            return filename;
+            return string.Concat(filename.Split(Path.GetInvalidFileNameChars()));
         }
     }
 }

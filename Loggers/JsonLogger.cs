@@ -1,71 +1,58 @@
-﻿using Easy_Logger.Interfaces;
-
+﻿using Easy_Logger.Enums;
+using Easy_Logger.Models;
+using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text.Json;
-using System.Threading.Tasks;
 
 namespace Easy_Logger.Loggers
 {
     /// <summary>
     /// Logging endpoint that records to JSON files
     /// </summary>
-    public class JsonLogger : FileLoggerBase, ILoggerEndpoint
+    public class JsonLogger : FileLoggerBase, ILogger
     {
-        public JsonLogger(ILoggingConfiguration loggingConfiguration) : base(loggingConfiguration)
-        {
-            Settings = loggingConfiguration;
-        }
+        public JsonLogger(string source, Func<LogLevel[]> logLevels, List<string> ignoredMessages, string logDirectory, string logfileNameTemplate, DatedSubdirectoryModes subdirectoryMode) : base(source, logLevels, ignoredMessages, logDirectory, logfileNameTemplate, subdirectoryMode) { }
 
         /// <inheritdoc/>
-        public ILoggingConfiguration Settings { get; set; }
+        public IDisposable BeginScope<TState>(TState state) => default!;
 
         /// <inheritdoc/>
-        public bool SaveToLog(ILoggerEntry loggerEntry)
+        public bool IsEnabled(LogLevel logLevel) => LogLevels().Contains(logLevel);
+
+        /// <inheritdoc/>
+        public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception? exception, Func<TState, Exception?, string> formatter)
         {
-            var directory = GetTextLogDirectory(loggerEntry.Timestamp, Settings);
-            var filename = GetTextLogFilename(loggerEntry.Timestamp, Settings);
+            if (IsEnabled(logLevel) == false)
+                return;
 
-            var path = Path.Combine(directory, $"{filename}.json");
+            var now = DateTime.Now;
+            var content = formatter(state, exception).Replace(";", "").Replace("=", "");
+            var entry = new LoggerEntry
+            {
+                Timestamp = now,
+                Severity = logLevel,
+                Tag = Source,
+                Message = content
+            };
 
-            SaveToLog(path, loggerEntry);
+            if (IgnoredMessages.Any(x => content.Contains(x, StringComparison.OrdinalIgnoreCase)))
+                return;
 
-            return true;
-        }
-
-        /// <summary>
-        /// Saves the provided entry to the endpoint
-        /// </summary>
-        /// <param name="path">The full path to store the entry</param>
-        /// <param name="entry">The log data to record</param>
-        /// <param name="retries">The number of times to retry on failure</param>
-        private void SaveToLog(string path, ILoggerEntry entry, int retries = 3)
-        {
             try
             {
-                // Write to log
+                var directory = GetTextLogDirectory(now);
+                var path = Path.Combine(directory, GetTextLogFilename(now), ".json");
+
+                Directory.CreateDirectory(directory);
+
                 using var writer = new StreamWriter(File.Open(path, FileMode.Append));
                 writer.WriteLine(JsonSerializer.Serialize(entry) + ',');
+                writer.Close();
             }
-            catch
-            {
-                // Check for out of tries
-                if (retries == 0)
-                    throw;
-
-                // Delay and try again
-                int delay;
-
-                if (retries >= 3)
-                    delay = 100;
-                else if (retries == 2)
-                    delay = 500;
-                else
-                    delay = 1_000;
-
-                Task.Delay(delay).Wait();
-
-                SaveToLog(path, entry, --retries);
-            }
+            catch { }
         }
     }
 }

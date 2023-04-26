@@ -1,8 +1,6 @@
 ﻿using Easy_Logger.Interfaces;
-
 using Microsoft.Extensions.Logging;
 using System;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Easy_Logger.Models
 {
@@ -11,29 +9,26 @@ namespace Easy_Logger.Models
     /// </summary>
     public class LoggerEntry : ILoggerEntry
     {
+        public LoggerEntry()
+        {
+            Message = string.Empty;
+        }
+
+        public LoggerEntry(string message)
+        {
+            Message = message;
+        }
+
         /// <inheritdoc/>
-        [Column("LogDate")]
         public DateTime Timestamp { get; set; } = DateTime.Now;
 
         /// <inheritdoc/>
-        [Column("LogTag")]
-        public string Tag { get; set; } = "Log:Message";
+        public string? Tag { get; set; }
 
         /// <inheritdoc/>
-        [Column("LogMessage")]
         public string Message { get; set; }
 
         /// <inheritdoc/>
-        [Column("LogSeverity")]
         public LogLevel Severity { get; set; } = LogLevel.Information;
-
-        /// <inheritdoc/>
-        public override string ToString()
-        {
-            return $"{Timestamp:yyyy-MM-dd HH:mm:ss.fff} " +
-                $"Severity :: {Severity} ;; " +
-                $"{Tag} :: {Message} ;; " +
-                Environment.NewLine;
-        }
     }
 }
