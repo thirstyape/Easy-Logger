@@ -58,7 +58,7 @@ namespace Easy_Logger.Providers
         /// <inheritdoc/>
         public Func<ILoggerEntry, string>? Formatter { get; set; } = entry =>
         {
-            return $"{entry.Timestamp:yyyy-MM-dd HH:mm:ss.fff}; Severity={entry.Severity}; Source={entry.Source}" + Environment.NewLine + entry.Message;
+            return $"{entry.Timestamp:yyyy-MM-dd HH:mm:ss.fff}; Severity={entry.Severity}; Source={entry.Source}" + Environment.NewLine + entry.Message + Environment.NewLine;
         };
 
         /// <summary>

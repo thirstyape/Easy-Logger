@@ -66,10 +66,12 @@ namespace Easy_Logger.Loggers
 
             try
             {
-                var directory = GetTextLogDirectory(entry.Timestamp);
-                var path = Path.Combine(directory, GetTextLogFilename(entry.Timestamp), ".json");
                 var entries = new List<LoggerEntry>();
 
+                var directory = GetTextLogDirectory(entry.Timestamp);
+                var file = GetTextLogFilename(entry.Timestamp);
+                var path = Path.Combine(directory, $"{file}.json");
+                
                 Directory.CreateDirectory(directory);
 
                 if (File.Exists(path))

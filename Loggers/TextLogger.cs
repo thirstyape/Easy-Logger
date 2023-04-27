@@ -73,7 +73,8 @@ namespace Easy_Logger.Loggers
             try
             {
                 var directory = GetTextLogDirectory(entry.Timestamp);
-                var path = Path.Combine(directory, GetTextLogFilename(entry.Timestamp), ".txt");
+                var file = GetTextLogFilename(entry.Timestamp);
+                var path = Path.Combine(directory, $"{file}.txt");
 
                 Directory.CreateDirectory(directory);
 

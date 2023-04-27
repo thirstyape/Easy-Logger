@@ -13,10 +13,13 @@
     <PackageTags>logger logging log text json memory console utility</PackageTags>
     <Description>This project was created to provide an easy to use and configurable logging library. If the default configuration is sufficient for your needs the library can be used out of the box without further setup. However, if you have specific logging needs you can alter the library configuration settings and also provide custom logging methods.</Description>
     <RepositoryUrl>https://github.com/thirstyape/Easy-Logger</RepositoryUrl>
-    <Version>2.0.0</Version>
+    <Version>2.0.1</Version>
     <PackageReleaseNotes>
+		2.0.1
+		Bug fixes
+		
 		2.0.0
-		Remove SQL logger
+		Add logger providers, Add Memory Logger, Add Console Logger, Remove SQL logger, Remove obsolete interfaces, Update loggers to implement ILogger
 		
 		1.0.4
 		Update NuGet packages to address security vulnerability in System.Data.SqlClient
@@ -31,8 +34,8 @@
         1.0.1
         Add ASP.NET compatible log provider
 	</PackageReleaseNotes>
-    <AssemblyVersion>2.0.0.0</AssemblyVersion>
-    <FileVersion>2.0.0.0</FileVersion>
+    <AssemblyVersion>2.0.1.0</AssemblyVersion>
+    <FileVersion>2.0.1.0</FileVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">

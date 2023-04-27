@@ -69,7 +69,7 @@ namespace Easy_Logger.Loggers
 
             var expired = DateTime.Now.Add(Configuration().Expiry.Negate());
 
-            foreach (var item in Configuration().MemoryLog.Where(x => expired < x.Value.Timestamp))
+            foreach (var item in Configuration().MemoryLog.Where(x => expired > x.Value.Timestamp))
                 Configuration().MemoryLog.TryRemove(item.Key, out ILoggerEntry _);
         }
     }
