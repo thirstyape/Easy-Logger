@@ -1,5 +1,8 @@
 # Easy Logger
 
+[![MIT](https://img.shields.io/github/license/thirstyape/Easy-Logger)](https://github.com/thirstyape/Easy-Logger/blob/master/LICENSE)
+[![NuGet](https://img.shields.io/nuget/v/Easy.Log.Writer.svg)](https://www.nuget.org/packages/Easy.Log.Writer/)
+
 This project was created to provide an easy to use and configurable logging library. If the default configuration is sufficient for your needs the library can be used out of the box without further setup. However, if you have specific logging needs you can alter the library configuration settings and also provide custom logging methods.
 
 The default implementation is capable of:
