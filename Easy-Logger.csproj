@@ -13,32 +13,37 @@
     <PackageTags>logger logging log text json memory console utility</PackageTags>
     <Description>This project was created to provide an easy to use and configurable logging library. If the default configuration is sufficient for your needs the library can be used out of the box without further setup. However, if you have specific logging needs you can alter the library configuration settings and also provide custom logging methods.</Description>
     <RepositoryUrl>https://github.com/thirstyape/Easy-Logger</RepositoryUrl>
-    <Version>2.0.1</Version>
+    <Version>2.0.2</Version>
     <PackageReleaseNotes>
+		2.0.2
+		Update project file to generate XML documentation in NuGet package
+		
 		2.0.1
 		Bug fixes
-		
+
 		2.0.0
 		Add logger providers, Add Memory Logger, Add Console Logger, Remove SQL logger, Remove obsolete interfaces, Update loggers to implement ILogger
-		
+
 		1.0.4
 		Update NuGet packages to address security vulnerability in System.Data.SqlClient
-		
+
 		1.0.3
-        Add XML file to output to allow Intellisense to work with package
-        Update dependent NuGet packages
+		Add XML file to output to allow Intellisense to work with package
+		Update dependent NuGet packages
 
-        1.0.2
-        Fix issue causing logger to fail on Linux deployments
+		1.0.2
+		Fix issue causing logger to fail on Linux deployments
 
-        1.0.1
-        Add ASP.NET compatible log provider
+		1.0.1
+		Add ASP.NET compatible log provider
 	</PackageReleaseNotes>
-    <AssemblyVersion>2.0.1.0</AssemblyVersion>
-    <FileVersion>2.0.1.0</FileVersion>
+    <AssemblyVersion>2.0.2.0</AssemblyVersion>
+    <FileVersion>2.0.2.0</FileVersion>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+  <PropertyGroup>
     <DocumentationFile>$(ProjectDir)Easy-Logger.xml</DocumentationFile>
   </PropertyGroup>
 
@@ -54,6 +59,10 @@
       <PackagePath></PackagePath>
     </None>
     <None Include="LICENSE">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+    <None Include="README.md">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>
