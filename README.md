@@ -134,7 +134,7 @@ logger.LogInformation(input);
 
 ## Authors
 
-* **Nathanael Frey**
+* **NF Software Inc.**
 
 ## License
 
