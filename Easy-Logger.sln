@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30104.148
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Easy Logger", "Easy-Logger.csproj", "{E02FCEB2-FAB7-46B1-B4B4-401B6B7CC4DA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Easy Logger", "Easy-Logger\Easy-Logger.csproj", "{E02FCEB2-FAB7-46B1-B4B4-401B6B7CC4DA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
