@@ -7,13 +7,20 @@ namespace Easy_Logger.Models
     /// <summary>
     /// Default implementation of <see cref="ILoggerEntry"/>
     /// </summary>
-    internal class LoggerEntry : ILoggerEntry
+    public class LoggerEntry : ILoggerEntry
     {
+        /// <summary>
+        /// Creates a new logger message
+        /// </summary>
         public LoggerEntry()
         {
             Message = string.Empty;
         }
 
+        /// <summary>
+        /// Creates a new logger message
+        /// </summary>
+        /// <param name="message">The text to record in the logs</param>
         public LoggerEntry(string message)
         {
             Message = message;

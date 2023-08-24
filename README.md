@@ -11,6 +11,7 @@ The default implementation is capable of:
 - Recording to JSON log files
 - Recording to an in-memory dictionary
 - Recording to the console
+- Recording to a SQL Server (requires use of the Easy.Log.Writer.Sql package or Easy-Logger-Sql.csproj project)
 - Adding dated folders to text-based logs (ex. /logs/2020/05/01/log.txt)
 - Adding templated filenames to text-based logs (ex. /logs/2020-05-01_My.Namespace_Log_150059.txt)
 - Being used as an ILogger implementation for ASP.NET and other API type applications
@@ -29,7 +30,7 @@ These instuctions can be used to acquire and implement the library.
 
 ### Installation
 
-To use this library either clone a copy of the repository or check out the [NuGet package](https://www.nuget.org/packages/Easy.Log.Writer/)
+To use this library either clone a copy of the repository or check out the [Main NuGet package](https://www.nuget.org/packages/Easy.Log.Writer/). If you would like to include SQL Server logging there is a [SQL Server NuGet package](https://www.nuget.org/packages/Easy.Log.Writer.Sql/), this package includes the main package.
 
 ### Usage
 
@@ -40,6 +41,7 @@ The following provides an example of the recommended usage.
 In this example both the text logger and console loggers are configured, so any log messages will be recorded to both. The text logger is configured using a custom formatter that will be applied as logs are saved to the text files; whereas the console logger has not been configured using a custom formatter, so the default formatter will be used.
 
 Program.cs or configuration class
+
 ```
 var builder = WebApplication.CreateBuilder();
 
@@ -79,6 +81,7 @@ builder.Logging
 ```
 
 Controller or other service
+
 ```
 public sealed class InfoController : ControllerBase 
 {
@@ -130,6 +133,65 @@ var message = Console.ReadLine();
 
 var logger = new ConsoleLogger("", () => new LogLevel[] { LogLevel.Information, LogLevel.Warning }, new List<string>() { "TaskCanceledException" }, new Dictionary<LogLevel, ConsoleColor>());
 logger.LogInformation(input);
+```
+
+**Blazor WebAssembly Example**
+
+The following example displays how the memory logger can be used to download a file in Blazor WebAssembly. This method is also useful in other situations where file system access is either unavailable or restricted. The example provides a button that users can click to save the logs; this has proven useful over console logging as the user can save logs then navigate elsewhere.
+
+Program.cs or configuration class
+
+```
+var builder = WebAssemblyHostBuilder.CreateDefault(args);
+
+builder.Logging.AddMemoryLogger(x =>
+{
+	x.LogLevels = new[] { LogLevel.Information, LogLevel.Warning, LogLevel.Error, LogLevel.Critical };
+});
+```
+
+Blazor Component
+
+```
+<button type="button" @onclick=OnClickSaveReport>Save Logs</button>
+
+@code {
+    [Inject]
+	private IJSRuntime JsRuntime { get; init; }
+
+    private async void OnClickSaveReport()
+	{
+		// Generate file content
+		var text = JsonSerializer.Serialize(MemoryLoggerProvider.DefaultLogger.Select(x => x.Value).OrderBy(x => x.Timestamp));
+		var fileName = $"{DateTime.Now:yyyyMMdd_HHmmss}_debug.txt";
+
+		// Stream
+		var bytes = Encoding.ASCII.GetBytes(text);
+		var fileStream = new MemoryStream(bytes);
+
+		using var streamRef = new DotNetStreamReference(fileStream);
+		await JsRuntime.InvokeVoidAsync("DownloadFileFromStream", fileName, streamRef);
+	}
+}
+```
+
+JavaScript Function
+
+```
+/**
+ * Converts the provided stream to a blob in memory and downloads the file
+ * @param {string} fileName The name to assign the downloaded file
+ * @param {any} contentStreamReference A reference to the steam to download
+ */
+DownloadFileFromStream: async function (fileName, contentStreamReference) {
+    var arrayBuffer = await contentStreamReference.arrayBuffer();
+    var blob = new Blob([arrayBuffer]);
+    var url = URL.createObjectURL(blob);
+
+    this.DownloadFileFromUrl(fileName, url);
+
+    URL.revokeObjectURL(url);
+}
 ```
 
 ## Authors

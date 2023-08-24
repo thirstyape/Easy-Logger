@@ -1,0 +1,54 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+	  <TargetFramework>netstandard2.1</TargetFramework>
+	  <Nullable>enable</Nullable>
+	  <RootNamespace>$(MSBuildProjectName.Replace("-", "_"))</RootNamespace>
+	  <PackageId>Easy.Log.Writer.Sql</PackageId>
+	  <Authors>NF Software Inc.</Authors>
+	  <Company>NF Software Inc.</Company>
+	  <Copyright>Copyright 2023 $(Company)</Copyright>
+	  <PackageLicenseFile>LICENSE</PackageLicenseFile>
+	  <PackageIcon>icon.png</PackageIcon>
+	  <PackageTags>logger logging log text json memory console sql utility</PackageTags>
+	  <Description>This project was created to provide an extension to the Easy.Log.Writer package that includes a SQL Server logging endpoint.</Description>
+	  <RepositoryUrl>https://github.com/thirstyape/Easy-Logger</RepositoryUrl>
+	  <RepositoryType>git</RepositoryType>
+	  <Version>2.0.3</Version>
+	  <PackageReleaseNotes>
+		  2.0.3
+		  Initial release
+	  </PackageReleaseNotes>
+	  <AssemblyVersion>2.0.3.0</AssemblyVersion>
+	  <FileVersion>2.0.3.0</FileVersion>
+	  <GenerateDocumentationFile>true</GenerateDocumentationFile>
+	  <PackageReadmeFile>README.md</PackageReadmeFile>
+  </PropertyGroup>
+
+	<PropertyGroup>
+		<DocumentationFile>$(ProjectDir)..\Easy-Logger-Sql.xml</DocumentationFile>
+	</PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Easy-Logger\Easy-Logger.csproj" />
+  </ItemGroup>
+
+	<ItemGroup>
+		<None Include="..\icon.png">
+			<Pack>True</Pack>
+			<PackagePath></PackagePath>
+		</None>
+		<None Include="..\LICENSE">
+			<Pack>True</Pack>
+			<PackagePath></PackagePath>
+		</None>
+		<None Include="..\README.md">
+			<Pack>True</Pack>
+			<PackagePath></PackagePath>
+		</None>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <PackageReference Include="Microsoft.Data.SqlClient" Version="[5.0.0,6)" />
+	</ItemGroup>
+</Project>

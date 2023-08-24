@@ -7,7 +7,7 @@ namespace Easy_Logger.Interfaces
     /// <summary>
     /// Defines properties required by logging options implementations
     /// </summary>
-    internal interface ILoggerConfiguration
+    public interface ILoggerConfiguration
     {
         /// <summary>
         /// The log levels to record log entries for
