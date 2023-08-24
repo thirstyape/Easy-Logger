@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Easy-Logger", "Easy-Logger\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Easy-Logger-Sql", "Easy-Logger-Sql\Easy-Logger-Sql.csproj", "{3B0D8163-0014-45A8-B3CA-8925CAC3EAC5}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Easy-Logger-Parser", "Easy-Logger-Parser\Easy-Logger-Parser.csproj", "{8FF21387-C1C6-4891-8DFB-0E5E8463EEDF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,12 @@ Global
 		{3B0D8163-0014-45A8-B3CA-8925CAC3EAC5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3B0D8163-0014-45A8-B3CA-8925CAC3EAC5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3B0D8163-0014-45A8-B3CA-8925CAC3EAC5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8FF21387-C1C6-4891-8DFB-0E5E8463EEDF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8FF21387-C1C6-4891-8DFB-0E5E8463EEDF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8FF21387-C1C6-4891-8DFB-0E5E8463EEDF}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{8FF21387-C1C6-4891-8DFB-0E5E8463EEDF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8FF21387-C1C6-4891-8DFB-0E5E8463EEDF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8FF21387-C1C6-4891-8DFB-0E5E8463EEDF}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

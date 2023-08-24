@@ -29,12 +29,15 @@ bld/
 
 # Visual Studio cache/options directory
 .vs/
+.vscode/
+*.code-workspace
 
 # MSTest test Results
 [Tt]est[Rr]esult*/
 [Bb]uild[Ll]og.*
 
-# Click-Once directory
+# Publish directories
+.config/
 [Pp]ublish/
 
 # Publish Web Output
@@ -49,6 +52,16 @@ bld/
 # The packages folder can be ignored because of Package Restore except build/, which is used as an MSBuild target.
 **/[Pp]ackages/*
 !**/[Pp]ackages/build/
+
+# Ignore generated web files
+*/wwwroot/css/*
+*/wwwroot/js/*
+
+# Windows thumbnail file
+Thumbs.db
+
+# Apple directory info file
+.DS_Store
 
 # XML Documentation file
 Easy-Logger.xml
