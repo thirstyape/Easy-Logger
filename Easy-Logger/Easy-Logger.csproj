@@ -14,8 +14,11 @@
     <Description>This project was created to provide an easy to use and configurable logging library. If the default configuration is sufficient for your needs the library can be used out of the box without further setup. However, if you have specific logging needs you can alter the library configuration settings and also provide custom logging methods.</Description>
     <RepositoryUrl>https://github.com/thirstyape/Easy-Logger</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <Version>2.0.5</Version>
+    <Version>2.0.6</Version>
     <PackageReleaseNotes>
+		2.0.6
+		Minor performance improvement
+		
 		2.0.5
 		Update NuGet requirements to enable use with .NET 7 and .NET 8
 		
@@ -47,8 +50,8 @@
 		1.0.1
 		Add ASP.NET compatible log provider
 	</PackageReleaseNotes>
-    <AssemblyVersion>2.0.5.0</AssemblyVersion>
-    <FileVersion>2.0.5.0</FileVersion>
+    <AssemblyVersion>2.0.6.0</AssemblyVersion>
+    <FileVersion>2.0.6.0</FileVersion>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>

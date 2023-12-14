@@ -84,13 +84,15 @@ namespace Easy_Logger.Loggers
             var day = date.Day.ToString().PadLeft(2, '0');
             var hour = date.Hour.ToString().PadLeft(2, '0');
 
-            var directory = Configuration().SubdirectoryMode switch
+			var current = Configuration();
+
+			var directory = current.SubdirectoryMode switch
             {
-                DatedSubdirectoryModes.Hourly => Path.Combine(Configuration().LogDirectory, year, month, day, hour),
-                DatedSubdirectoryModes.Daily => Path.Combine(Configuration().LogDirectory, year, month, day),
-                DatedSubdirectoryModes.Monthly => Path.Combine(Configuration().LogDirectory, year, month),
-                DatedSubdirectoryModes.Yearly => Path.Combine(Configuration().LogDirectory, year),
-                _ => Configuration().LogDirectory
+                DatedSubdirectoryModes.Hourly => Path.Combine(current.LogDirectory, year, month, day, hour),
+                DatedSubdirectoryModes.Daily => Path.Combine(current.LogDirectory, year, month, day),
+                DatedSubdirectoryModes.Monthly => Path.Combine(current.LogDirectory, year, month),
+                DatedSubdirectoryModes.Yearly => Path.Combine(current.LogDirectory, year),
+                _ => current.LogDirectory
             };
 
             return directory;

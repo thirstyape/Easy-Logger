@@ -62,15 +62,17 @@ namespace Easy_Logger.Loggers
                 Source = Source
             };
 
-            if (Configuration().IgnoredMessages.Any(x => entry.Message.Contains(x, StringComparison.OrdinalIgnoreCase)))
+            var current = Configuration();
+
+            if (current.IgnoredMessages.Any(x => entry.Message.Contains(x, StringComparison.OrdinalIgnoreCase)))
                 return;
 
-            Configuration().MemoryLog.TryAdd(Guid.NewGuid(), entry);
+			current.MemoryLog.TryAdd(Guid.NewGuid(), entry);
 
-            var expired = DateTime.Now.Add(Configuration().Expiry.Negate());
+            var expired = DateTime.Now.Add(current.Expiry.Negate());
 
-            foreach (var item in Configuration().MemoryLog.Where(x => expired > x.Value.Timestamp))
-                Configuration().MemoryLog.TryRemove(item.Key, out ILoggerEntry _);
+            foreach (var item in current.MemoryLog.Where(x => expired > x.Value.Timestamp))
+				current.MemoryLog.TryRemove(item.Key, out ILoggerEntry _);
         }
     }
 }

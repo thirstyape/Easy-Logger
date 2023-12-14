@@ -11,6 +11,7 @@ The default implementation is capable of:
 - Recording to JSON log files
 - Recording to an in-memory dictionary
 - Recording to the console
+- Recording to the web console (requires use of the Easy.Log.Writer.Blazor package or Easy-Logger-Blazor.csproj project for coloring and formatting log messages)
 - Recording to a SQL Server (requires use of the Easy.Log.Writer.Sql package or Easy-Logger-Sql.csproj project)
 - Adding dated folders to text-based logs (ex. /logs/2020/05/01/log.txt)
 - Adding templated filenames to text-based logs (ex. /logs/2020-05-01_My.Namespace_Log_150059.txt)
@@ -193,6 +194,8 @@ DownloadFileFromStream: async function (fileName, contentStreamReference) {
     URL.revokeObjectURL(url);
 }
 ```
+
+**Blazor Color Example**
 
 ## Authors
 
