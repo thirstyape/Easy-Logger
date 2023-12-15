@@ -15,13 +15,16 @@
 	  <Description>This project was created to provide an extension to the Easy.Log.Writer package that includes a Blazor logging endpoint. The base package can also output to the web console, but does not have advanced features such as custom log color or formats.</Description>
 	  <RepositoryUrl>https://github.com/thirstyape/Easy-Logger</RepositoryUrl>
 	  <RepositoryType>git</RepositoryType>
-	  <Version>2.0.6</Version>
+	  <Version>2.0.7</Version>
 	  <PackageReleaseNotes>
+		  2.0.7
+		  Fix for CSS not applying
+		  
 		  2.0.6
 		  Initial release
 	  </PackageReleaseNotes>
-	  <AssemblyVersion>2.0.6.0</AssemblyVersion>
-	  <FileVersion>2.0.6.0</FileVersion>
+	  <AssemblyVersion>2.0.7.0</AssemblyVersion>
+	  <FileVersion>2.0.7.0</FileVersion>
 	  <GenerateDocumentationFile>true</GenerateDocumentationFile>
 	  <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>

@@ -71,19 +71,7 @@ public class BrowserLogger : ILogger
 		else
 			message = current.Formatter.Invoke(entry);
 
-		if (current.CssStyles != null && current.Formatter != null)
-		{
-			_ = logLevel switch
-			{
-				LogLevel.Critical or LogLevel.Error => JsRuntime.InvokeVoidAsync("console.error", message, current.CssStyles.ToArray()),
-				LogLevel.Warning => JsRuntime.InvokeVoidAsync("console.warn", message, current.CssStyles.ToArray()),
-				LogLevel.Information => JsRuntime.InvokeVoidAsync("console.info", message, current.CssStyles.ToArray()),
-				LogLevel.Debug => JsRuntime.InvokeVoidAsync("console.debug", message, current.CssStyles.ToArray()),
-				LogLevel.Trace => JsRuntime.InvokeVoidAsync("console.trace", message, current.CssStyles.ToArray()),
-				_ => JsRuntime.InvokeVoidAsync("console.log", message, current.CssStyles.ToArray())
-			};
-		}
-		else
+		if (current.CssStyles == null)
 		{
 			_ = logLevel switch
 			{
@@ -93,6 +81,66 @@ public class BrowserLogger : ILogger
 				LogLevel.Debug => JsRuntime.InvokeVoidAsync("console.debug", message),
 				LogLevel.Trace => JsRuntime.InvokeVoidAsync("console.trace", message),
 				_ => JsRuntime.InvokeVoidAsync("console.log", message)
+			};
+		}
+		else if (current.CssStyles.Count == 1)
+		{
+			_ = logLevel switch
+			{
+				LogLevel.Critical or LogLevel.Error => JsRuntime.InvokeVoidAsync("console.error", message, current.CssStyles[0]),
+				LogLevel.Warning => JsRuntime.InvokeVoidAsync("console.warn", message, current.CssStyles[0]),
+				LogLevel.Information => JsRuntime.InvokeVoidAsync("console.info", message, current.CssStyles[0]),
+				LogLevel.Debug => JsRuntime.InvokeVoidAsync("console.debug", message, current.CssStyles[0]),
+				LogLevel.Trace => JsRuntime.InvokeVoidAsync("console.trace", message, current.CssStyles[0]),
+				_ => JsRuntime.InvokeVoidAsync("console.log", message, current.CssStyles[0])
+			};
+		}
+		else if (current.CssStyles.Count == 2)
+		{
+			_ = logLevel switch
+			{
+				LogLevel.Critical or LogLevel.Error => JsRuntime.InvokeVoidAsync("console.error", message, current.CssStyles[0], current.CssStyles[1]),
+				LogLevel.Warning => JsRuntime.InvokeVoidAsync("console.warn", message, current.CssStyles[0], current.CssStyles[1]),
+				LogLevel.Information => JsRuntime.InvokeVoidAsync("console.info", message, current.CssStyles[0], current.CssStyles[1]),
+				LogLevel.Debug => JsRuntime.InvokeVoidAsync("console.debug", message, current.CssStyles[0], current.CssStyles[1]),
+				LogLevel.Trace => JsRuntime.InvokeVoidAsync("console.trace", message, current.CssStyles[0], current.CssStyles[1]),
+				_ => JsRuntime.InvokeVoidAsync("console.log", message, current.CssStyles[0], current.CssStyles[1])
+			};
+		}
+		else if (current.CssStyles.Count == 3)
+		{
+			_ = logLevel switch
+			{
+				LogLevel.Critical or LogLevel.Error => JsRuntime.InvokeVoidAsync("console.error", message, current.CssStyles[0], current.CssStyles[1], current.CssStyles[2]),
+				LogLevel.Warning => JsRuntime.InvokeVoidAsync("console.warn", message, current.CssStyles[0], current.CssStyles[1], current.CssStyles[2]),
+				LogLevel.Information => JsRuntime.InvokeVoidAsync("console.info", message, current.CssStyles[0], current.CssStyles[1], current.CssStyles[2]),
+				LogLevel.Debug => JsRuntime.InvokeVoidAsync("console.debug", message, current.CssStyles[0], current.CssStyles[1], current.CssStyles[2]),
+				LogLevel.Trace => JsRuntime.InvokeVoidAsync("console.trace", message, current.CssStyles[0], current.CssStyles[1], current.CssStyles[2]),
+				_ => JsRuntime.InvokeVoidAsync("console.log", message, current.CssStyles[0], current.CssStyles[1], current.CssStyles[2])
+			};
+		}
+		else if (current.CssStyles.Count == 4)
+		{
+			_ = logLevel switch
+			{
+				LogLevel.Critical or LogLevel.Error => JsRuntime.InvokeVoidAsync("console.error", message, current.CssStyles[0], current.CssStyles[1], current.CssStyles[2], current.CssStyles[3]),
+				LogLevel.Warning => JsRuntime.InvokeVoidAsync("console.warn", message, current.CssStyles[0], current.CssStyles[1], current.CssStyles[2], current.CssStyles[3]),
+				LogLevel.Information => JsRuntime.InvokeVoidAsync("console.info", message, current.CssStyles[0], current.CssStyles[1], current.CssStyles[2], current.CssStyles[3]),
+				LogLevel.Debug => JsRuntime.InvokeVoidAsync("console.debug", message, current.CssStyles[0], current.CssStyles[1], current.CssStyles[2], current.CssStyles[3]),
+				LogLevel.Trace => JsRuntime.InvokeVoidAsync("console.trace", message, current.CssStyles[0], current.CssStyles[1], current.CssStyles[2], current.CssStyles[3]),
+				_ => JsRuntime.InvokeVoidAsync("console.log", message, current.CssStyles[0], current.CssStyles[1], current.CssStyles[2], current.CssStyles[3])
+			};
+		}
+		else if (current.CssStyles.Count >= 5)
+		{
+			_ = logLevel switch
+			{
+				LogLevel.Critical or LogLevel.Error => JsRuntime.InvokeVoidAsync("console.error", message, current.CssStyles[0], current.CssStyles[1], current.CssStyles[2], current.CssStyles[3], current.CssStyles[4]),
+				LogLevel.Warning => JsRuntime.InvokeVoidAsync("console.warn", message, current.CssStyles[0], current.CssStyles[1], current.CssStyles[2], current.CssStyles[3], current.CssStyles[4]),
+				LogLevel.Information => JsRuntime.InvokeVoidAsync("console.info", message, current.CssStyles[0], current.CssStyles[1], current.CssStyles[2], current.CssStyles[3], current.CssStyles[4]),
+				LogLevel.Debug => JsRuntime.InvokeVoidAsync("console.debug", message, current.CssStyles[0], current.CssStyles[1], current.CssStyles[2], current.CssStyles[3], current.CssStyles[4]),
+				LogLevel.Trace => JsRuntime.InvokeVoidAsync("console.trace", message, current.CssStyles[0], current.CssStyles[1], current.CssStyles[2], current.CssStyles[3], current.CssStyles[4]),
+				_ => JsRuntime.InvokeVoidAsync("console.log", message, current.CssStyles[0], current.CssStyles[1], current.CssStyles[2], current.CssStyles[3], current.CssStyles[4])
 			};
 		}
 	}

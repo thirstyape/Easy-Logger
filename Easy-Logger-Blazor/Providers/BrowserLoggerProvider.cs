@@ -73,7 +73,7 @@ public class BrowserLoggerConfiguration : ILoggerConfiguration
 	};
 
 	/// <summary>
-	/// A collection of CSS styles to apply to messages.
+	/// A collection of CSS styles to apply to messages. Supports up to 5 styles.
 	/// </summary>
 	/// <remarks>
 	/// You must set <see cref="Formatter"/> for this to work. For each item in the list, you will need to add a '%c' to use it in your messages. Example:
