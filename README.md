@@ -31,7 +31,11 @@ These instuctions can be used to acquire and implement the library.
 
 ### Installation
 
-To use this library either clone a copy of the repository or check out the [Main NuGet package](https://www.nuget.org/packages/Easy.Log.Writer/). If you would like to include SQL Server logging there is a [SQL Server NuGet package](https://www.nuget.org/packages/Easy.Log.Writer.Sql/), this package includes the main package.
+To use this library either clone a copy of the repository or check out one of the NuGet packages. There are 3 packages.
+
+- [Main NuGet package](https://www.nuget.org/packages/Easy.Log.Writer/)
+- [Blazor NuGet package](https://www.nuget.org/packages/Easy.Log.Writer.Blazor/), enables colored logging to the browser console, includes the main package
+- [SQL Server NuGet package](https://www.nuget.org/packages/Easy.Log.Writer.Sql/), enables logging to SQL Server, includes the main package
 
 ### Usage
 
@@ -195,7 +199,18 @@ DownloadFileFromStream: async function (fileName, contentStreamReference) {
 }
 ```
 
-**Blazor Color Example**
+**Blazor Browser Console Example**
+
+The following example displays how to configure the console logger in a web browser. This uses the Blazor NuGet package.
+
+```
+var builder = WebAssemblyHostBuilder.CreateDefault(args);
+
+builder.Logging.AddBrowserLogger(x =>
+{
+	x.LogLevels = new[] { LogLevel.Information, LogLevel.Warning, LogLevel.Error, LogLevel.Critical };
+});
+```
 
 ## Authors
 
