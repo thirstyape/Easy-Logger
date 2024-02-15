@@ -14,16 +14,19 @@
 	  <Description>This project was created to provide an extension to the Easy.Log.Writer package that includes a SQL Server logging endpoint.</Description>
 	  <RepositoryUrl>https://github.com/thirstyape/Easy-Logger</RepositoryUrl>
 	  <RepositoryType>git</RepositoryType>
-	  <Version>2.0.6</Version>
+	  <Version>2.0.7</Version>
 	  <PackageReleaseNotes>
+		  2.0.7
+		  Update SQL dependency to patch security issue
+		  
 		  2.0.6
 		  Update with changes from Easy.Log.Writer
-		  
+
 		  2.0.3
 		  Initial release
 	  </PackageReleaseNotes>
-	  <AssemblyVersion>2.0.6.0</AssemblyVersion>
-	  <FileVersion>2.0.6.0</FileVersion>
+	  <AssemblyVersion>2.0.7.0</AssemblyVersion>
+	  <FileVersion>2.0.7.0</FileVersion>
 	  <GenerateDocumentationFile>true</GenerateDocumentationFile>
 	  <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
@@ -52,6 +55,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="Microsoft.Data.SqlClient" Version="[5.0.0,6)" />
+	  <PackageReference Include="Microsoft.Data.SqlClient" Version="[5.1.3,6)" />
 	</ItemGroup>
 </Project>
