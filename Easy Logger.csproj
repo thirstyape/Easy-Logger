@@ -12,23 +12,26 @@
     <PackageTags>logger logging log sql text json utility</PackageTags>
     <Description>This project was created to provide an easy to use and configurable logging library. If the default configuration is sufficient for your needs the library can be used out of the box without further setup. However, if you have specific logging needs you can alter the library configuration settings and also provide custom logging methods.</Description>
     <RepositoryUrl>https://github.com/thirstyape/Easy-Logger</RepositoryUrl>
-    <Version>1.0.4</Version>
+    <Version>1.0.5</Version>
     <PackageReleaseNotes>
+		1.0.5
+		Update SQL dependency to patch security issue
+		
 		1.0.4
 		Update NuGet packages to address security vulnerability in System.Data.SqlClient
-		
+
 		1.0.3
-        Add XML file to output to allow Intellisense to work with package
-        Update dependent NuGet packages
+		Add XML file to output to allow Intellisense to work with package
+		Update dependent NuGet packages
 
-        1.0.2
-        Fix issue causing logger to fail on Linux deployments
+		1.0.2
+		Fix issue causing logger to fail on Linux deployments
 
-        1.0.1
-        Add ASP.NET compatible log provider
+		1.0.1
+		Add ASP.NET compatible log provider
 	</PackageReleaseNotes>
-    <AssemblyVersion>1.0.3.0</AssemblyVersion>
-    <FileVersion>1.0.3.0</FileVersion>
+    <AssemblyVersion>1.0.5.0</AssemblyVersion>
+    <FileVersion>1.0.5.0</FileVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -36,10 +39,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="3.1.31" />
-    <PackageReference Include="System.ComponentModel.Annotations" Version="4.7.0" />
-    <PackageReference Include="System.Data.SqlClient" Version="4.8.5" />
-    <PackageReference Include="System.Text.Json" Version="4.7.2" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="3.1.*" />
+    <PackageReference Include="System.ComponentModel.Annotations" Version="4.7.*" />
+    <PackageReference Include="System.Data.SqlClient" Version="[4.8.6,5)" />
+    <PackageReference Include="System.Text.Json" Version="4.7.*" />
   </ItemGroup>
 
   <ItemGroup>
