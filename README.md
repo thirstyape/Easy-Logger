@@ -47,7 +47,7 @@ In this example both the text logger and console loggers are configured, so any 
 
 Program.cs or configuration class
 
-```
+```csharp
 var builder = WebApplication.CreateBuilder();
 
 var logLevels = new[] { LogLevel.Trace, LogLevel.Debug, LogLevel.Information, LogLevel.Warning, LogLevel.Error, LogLevel.Critical };
@@ -87,7 +87,7 @@ builder.Logging
 
 Controller or other service
 
-```
+```csharp
 public sealed class InfoController : ControllerBase 
 {
     private readonly ILogger logger;
@@ -111,7 +111,7 @@ public sealed class InfoController : ControllerBase
 
 The following provides an example of customizing the formatting for a single message. The per-message formatting is applied to the ILoggerEntry.Message property; if the configuration for the logger has a global formatter, that will be applied afterwards.
 
-```
+```csharp
 public void Test(string? message)
 {
     try 
@@ -132,7 +132,7 @@ public void Test(string? message)
 
 The following provides an example of using a logger directly.
 
-```
+```csharp
 Console.WriteLine("Enter a message to log:");
 var message = Console.ReadLine();
 
@@ -146,7 +146,7 @@ The following example displays how the memory logger can be used to download a f
 
 Program.cs or configuration class
 
-```
+```csharp
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 
 builder.Logging.AddMemoryLogger(x =>
@@ -157,7 +157,7 @@ builder.Logging.AddMemoryLogger(x =>
 
 Blazor Component
 
-```
+```razor
 <button type="button" @onclick=OnClickSaveReport>Save Logs</button>
 
 @code {
@@ -182,7 +182,7 @@ Blazor Component
 
 JavaScript Function
 
-```
+```js
 /**
  * Converts the provided stream to a blob in memory and downloads the file
  * @param {string} fileName The name to assign the downloaded file
@@ -203,7 +203,7 @@ DownloadFileFromStream: async function (fileName, contentStreamReference) {
 
 The following example displays how to configure the console logger in a web browser. This uses the Blazor NuGet package.
 
-```
+```csharp
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 
 builder.Logging.AddBrowserLogger(x =>
