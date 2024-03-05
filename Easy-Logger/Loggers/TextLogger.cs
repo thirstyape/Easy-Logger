@@ -60,15 +60,17 @@ namespace Easy_Logger.Loggers
                 Source = Source
             };
 
-            if (Configuration().IgnoredMessages.Any(x => entry.Message.Contains(x, StringComparison.OrdinalIgnoreCase)))
+			var current = Configuration();
+
+			if (current.IgnoredMessages.Any(x => entry.Message.Contains(x, StringComparison.OrdinalIgnoreCase)))
                 return;
 
             string text;
 
-            if (Configuration().Formatter == null)
+            if (current.Formatter == null)
                 text = $"{entry.Timestamp:yyyy-MM-dd HH:mm:ss.fff}; Severity={entry.Severity}; Source={entry.Source}; Text={entry.Message.Replace(";", "").Replace("=", "")}";
             else
-                text = Configuration().Formatter!.Invoke(entry);
+                text = current.Formatter.Invoke(entry);
 
             try
             {

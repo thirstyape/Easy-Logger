@@ -64,10 +64,12 @@ namespace Easy_Logger.Loggers
                 Source = Source
             };
 
-            if (Configuration().IgnoredMessages.Any(x => entry.Message.Contains(x, StringComparison.OrdinalIgnoreCase)))
+			var current = Configuration();
+
+			if (current.IgnoredMessages.Any(x => entry.Message.Contains(x, StringComparison.OrdinalIgnoreCase)))
                 return;
 
-            var query = $"INSERT INTO {GetSqlName(Configuration().SqlTableName)} ({GetSqlName(Configuration().LogDateColumnName)}, {GetSqlName(Configuration().LogSourceColumnName)}, {GetSqlName(Configuration().LogMessageColumnName)}, {GetSqlName(Configuration().LogSeverityColumnName)}) VALUES (@LogDate, @LogSource, @LogMessage, @LogSeverity)";
+            var query = $"INSERT INTO {GetSqlName(current.SqlTableName)} ({GetSqlName(current.LogDateColumnName)}, {GetSqlName(current.LogSourceColumnName)}, {GetSqlName(current.LogMessageColumnName)}, {GetSqlName(current.LogSeverityColumnName)}) VALUES (@LogDate, @LogSource, @LogMessage, @LogSeverity)";
             var parameters = new List<SqlParameter>()
             {
                 new SqlParameter("@LogDate", SqlDbType.DateTime2) { Value = entry.Timestamp },

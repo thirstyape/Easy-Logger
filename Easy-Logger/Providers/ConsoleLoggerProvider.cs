@@ -76,6 +76,14 @@ namespace Easy_Logger.Providers
             [LogLevel.Error] = ConsoleColor.Red,
             [LogLevel.Critical] = ConsoleColor.Magenta
         };
+
+        /// <summary>
+        /// Specfies whether to color log messages according to their <see cref="LogLevel"/>
+        /// </summary>
+        /// <remarks>
+        /// Certain platforms may not support colorization
+        /// </remarks>
+        public bool UseColoredMessages { get; set; } = true;
     }
 
     /// <summary>

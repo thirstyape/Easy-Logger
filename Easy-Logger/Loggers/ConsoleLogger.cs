@@ -58,21 +58,29 @@ namespace Easy_Logger.Loggers
                 Source = Source
             };
 
-            if (Configuration().IgnoredMessages.Any(x => entry.Message.Contains(x, StringComparison.OrdinalIgnoreCase)))
+			var current = Configuration();
+
+			if (current.IgnoredMessages.Any(x => entry.Message.Contains(x, StringComparison.OrdinalIgnoreCase)))
                 return;
 
-            if (Configuration().Formatter == null)
+            if (current.Formatter == null)
             {
-                Console.ForegroundColor = Configuration().LogLevelToColorMap.ContainsKey(entry.Severity) ? Configuration().LogLevelToColorMap[entry.Severity] : ConsoleColor.White;
+                if (current.UseColoredMessages)
+                    Console.ForegroundColor = current.LogLevelToColorMap.ContainsKey(entry.Severity) ? current.LogLevelToColorMap[entry.Severity] : ConsoleColor.White;
+
                 Console.WriteLine($"{entry.Timestamp:yyyy-MM-dd HH:mm:ss.fff}; Severity={entry.Severity}; Source={entry.Source}");
 
-                Console.ForegroundColor = ConsoleColor.White;
+                if (current.UseColoredMessages)
+                    Console.ForegroundColor = ConsoleColor.White;
+
                 Console.WriteLine(entry.Message);
             }
             else
             {
-                Console.ForegroundColor = Configuration().LogLevelToColorMap.ContainsKey(entry.Severity) ? Configuration().LogLevelToColorMap[entry.Severity] : ConsoleColor.White;
-                Console.Write(Configuration().Formatter!.Invoke(entry));
+                if (current.UseColoredMessages)
+                    Console.ForegroundColor = current.LogLevelToColorMap.ContainsKey(entry.Severity) ? current.LogLevelToColorMap[entry.Severity] : ConsoleColor.White;
+
+                Console.Write(current.Formatter.Invoke(entry));
             }
         }
     }

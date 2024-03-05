@@ -11,6 +11,7 @@ The default implementation is capable of:
 - Recording to JSON log files
 - Recording to an in-memory dictionary
 - Recording to the console
+- Recording to the web console (requires use of the Easy.Log.Writer.Blazor package or Easy-Logger-Blazor.csproj project for coloring and formatting log messages)
 - Recording to a SQL Server (requires use of the Easy.Log.Writer.Sql package or Easy-Logger-Sql.csproj project)
 - Adding dated folders to text-based logs (ex. /logs/2020/05/01/log.txt)
 - Adding templated filenames to text-based logs (ex. /logs/2020-05-01_My.Namespace_Log_150059.txt)
@@ -30,7 +31,11 @@ These instuctions can be used to acquire and implement the library.
 
 ### Installation
 
-To use this library either clone a copy of the repository or check out the [Main NuGet package](https://www.nuget.org/packages/Easy.Log.Writer/). If you would like to include SQL Server logging there is a [SQL Server NuGet package](https://www.nuget.org/packages/Easy.Log.Writer.Sql/), this package includes the main package.
+To use this library either clone a copy of the repository or check out one of the NuGet packages. There are 3 packages.
+
+- [Main NuGet package](https://www.nuget.org/packages/Easy.Log.Writer/)
+- [Blazor NuGet package](https://www.nuget.org/packages/Easy.Log.Writer.Blazor/), enables colored logging to the browser console, includes the main package
+- [SQL Server NuGet package](https://www.nuget.org/packages/Easy.Log.Writer.Sql/), enables logging to SQL Server, includes the main package
 
 ### Usage
 
@@ -42,7 +47,7 @@ In this example both the text logger and console loggers are configured, so any 
 
 Program.cs or configuration class
 
-```
+```csharp
 var builder = WebApplication.CreateBuilder();
 
 var logLevels = new[] { LogLevel.Trace, LogLevel.Debug, LogLevel.Information, LogLevel.Warning, LogLevel.Error, LogLevel.Critical };
@@ -82,7 +87,7 @@ builder.Logging
 
 Controller or other service
 
-```
+```csharp
 public sealed class InfoController : ControllerBase 
 {
     private readonly ILogger logger;
@@ -106,7 +111,7 @@ public sealed class InfoController : ControllerBase
 
 The following provides an example of customizing the formatting for a single message. The per-message formatting is applied to the ILoggerEntry.Message property; if the configuration for the logger has a global formatter, that will be applied afterwards.
 
-```
+```csharp
 public void Test(string? message)
 {
     try 
@@ -127,7 +132,7 @@ public void Test(string? message)
 
 The following provides an example of using a logger directly.
 
-```
+```csharp
 Console.WriteLine("Enter a message to log:");
 var message = Console.ReadLine();
 
@@ -141,7 +146,7 @@ The following example displays how the memory logger can be used to download a f
 
 Program.cs or configuration class
 
-```
+```csharp
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 
 builder.Logging.AddMemoryLogger(x =>
@@ -152,7 +157,7 @@ builder.Logging.AddMemoryLogger(x =>
 
 Blazor Component
 
-```
+```razor
 <button type="button" @onclick=OnClickSaveReport>Save Logs</button>
 
 @code {
@@ -177,7 +182,7 @@ Blazor Component
 
 JavaScript Function
 
-```
+```js
 /**
  * Converts the provided stream to a blob in memory and downloads the file
  * @param {string} fileName The name to assign the downloaded file
@@ -192,6 +197,19 @@ DownloadFileFromStream: async function (fileName, contentStreamReference) {
 
     URL.revokeObjectURL(url);
 }
+```
+
+**Blazor Browser Console Example**
+
+The following example displays how to configure the console logger in a web browser. This uses the Blazor NuGet package.
+
+```csharp
+var builder = WebAssemblyHostBuilder.CreateDefault(args);
+
+builder.Logging.AddBrowserLogger(x =>
+{
+	x.LogLevels = new[] { LogLevel.Information, LogLevel.Warning, LogLevel.Error, LogLevel.Critical };
+});
 ```
 
 ## Authors

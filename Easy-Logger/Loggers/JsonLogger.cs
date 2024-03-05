@@ -61,7 +61,9 @@ namespace Easy_Logger.Loggers
                 Source = Source
             };
 
-            if (Configuration().IgnoredMessages.Any(x => entry.Message.Contains(x, StringComparison.OrdinalIgnoreCase)))
+			var current = Configuration();
+
+			if (current.IgnoredMessages.Any(x => entry.Message.Contains(x, StringComparison.OrdinalIgnoreCase)))
                 return;
 
             try
@@ -77,13 +79,13 @@ namespace Easy_Logger.Loggers
                 if (File.Exists(path))
                 {
                     var text = File.ReadAllText(path);
-                    entries = JsonSerializer.Deserialize<List<LoggerEntry>>(text, Configuration().Options)!;
+                    entries = JsonSerializer.Deserialize<List<LoggerEntry>>(text, current.Options)!;
                 }
 
                 entries.Add(entry);
 
                 using var writer = new StreamWriter(File.Open(path, FileMode.Create));
-                writer.Write(JsonSerializer.Serialize(entries, Configuration().Options));
+                writer.Write(JsonSerializer.Serialize(entries, current.Options));
                 writer.Close();
             }
             catch { }
