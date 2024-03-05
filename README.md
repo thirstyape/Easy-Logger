@@ -16,6 +16,7 @@ The default implementation is capable of:
 - Adding dated folders to text-based logs (ex. /logs/2020/05/01/log.txt)
 - Adding templated filenames to text-based logs (ex. /logs/2020-05-01_My.Namespace_Log_150059.txt)
 - Being used as an ILogger implementation for ASP.NET and other API type applications
+- Parsing and searching JSON log files (requires downloading and installing the Easy Logger Parser app)
 
 ## Breaking Changes V2.0
 

@@ -1,10 +1,14 @@
-﻿namespace Easy_Logger_Parser;
+﻿using Easy_Logger.Providers;
+using Microsoft.Extensions.Logging;
+
+namespace Easy_Logger_Parser;
 
 public static class MauiProgram
 {
 	public static MauiApp CreateMauiApp()
 	{
 		var builder = MauiApp.CreateBuilder();
+
 		builder
 			.UseMauiApp<App>()
 			.ConfigureFonts(fonts =>
@@ -15,6 +19,12 @@ public static class MauiProgram
 		builder.Services.AddMauiBlazorWebView();
 
 		#if DEBUG
+		builder.Logging.ClearProviders();
+		builder.Logging.AddBrowserLogger(x =>
+		{
+			x.LogLevels = [LogLevel.Information, LogLevel.Warning, LogLevel.Error, LogLevel.Critical];
+		});
+
 		builder.Services.AddBlazorWebViewDeveloperTools();
 		#endif
 
