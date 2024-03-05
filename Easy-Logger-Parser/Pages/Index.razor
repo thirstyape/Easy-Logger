@@ -1,0 +1,143 @@
+﻿@page "/"
+@inherits ComponentBase
+
+<TitleBlock Title="Easy Logger Parser" />
+
+<div class="container">
+    <EditForm Model="InputModel">
+        <div class="columns">
+            <div class="column">
+                <div class="field">
+                    <label class="label">Upload Log File</label>
+                    <div class="control has-icons-left">
+                        <InputFile class="input" OnChange="AddFile" accept=".txt,.json,.log" />
+                        <span class="material-icons icon is-left">file_upload</span>
+                    </div>
+                </div>
+            </div>
+            <div class="column">
+                <div class="field">
+                    <label class="label">Log File Data</label>
+                    <div class="control has-icons-left">
+                        <InputTextArea class="input" @bind-Value="InputModel.LogFileData" @oninput='OnLogFileDataChanged' autocomplete="off" rows="6" />
+                        <span class="material-icons icon is-left">description</span>
+                        <div class="help is-danger">
+                            <ValidationMessage For="() => InputModel.LogFileData" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </EditForm>
+
+    <EditForm Model="ViewModel">
+        <div class="columns">
+            <div class="column">
+                <div class="field">
+                    <label class="label">Start</label>
+                    <div class="control has-icons-left has-icons-right">
+                        <InputDateTime @bind-Value=ViewModel.Start />
+                        <div class="help is-danger">
+                            <ValidationMessage For="() => ViewModel.Start" />
+                        </div>
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="label">End</label>
+                    <div class="control has-icons-left has-icons-right">
+                        <InputDateTime @bind-Value=ViewModel.End />
+                        <div class="help is-danger">
+                            <ValidationMessage For="() => ViewModel.End" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="column">
+                <div class="field">
+                    <label class="label">Event Id</label>
+                    <div class="control has-icons-left">
+                        <InputNumber class="input" @bind-Value=ViewModel.EventNumber />
+                        <span class="material-icons icon is-left">numbers</span>
+                        <div class="help is-danger">
+                            <ValidationMessage For="() => ViewModel.EventNumber" />
+                        </div>
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="label">Event Name</label>
+                    <div class="control has-icons-left">
+                        <InputText class="input" @bind-Value=ViewModel.EventName />
+                        <span class="material-icons icon is-left">title</span>
+                        <div class="help is-danger">
+                            <ValidationMessage For="() => ViewModel.EventName" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="column">
+                <div class="field">
+                    <label class="label">Message Text</label>
+                    <div class="control has-icons-left">
+                        <InputText class="input" @bind-Value=ViewModel.SearchMessage />
+                        <span class="material-icons icon is-left">search</span>
+                        <div class="help is-danger">
+                            <ValidationMessage For="() => ViewModel.SearchMessage" />
+                        </div>
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="label">Source</label>
+                    <div class="control has-icons-left is-expanded">
+                        <div class="select is-fullwidth">
+                            <InputSelect @bind-Value="ViewModel.Source">
+                                <option value="">Any</option>
+                                @foreach (var source in InputModel.LogSources)
+                                {
+                                    <option value="@source">@source</option>
+                                }
+                            </InputSelect>
+                        </div>
+                        <span class="material-icons icon is-left">list</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="columns">
+            <div class="column">
+                <div class="field">
+                    <label class="label">Log Levels</label>
+                    <div class="control">                    
+                        <InputFlaggedEnum @bind-Value="ViewModel.SelectedLogLevels" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </EditForm>
+</div>
+
+<div class="p-1">
+    <table class="table is-striped is-fullwidth">
+        <thead>
+            <tr>
+                <th style="min-width: 200px">Timestamp</th>
+                <th>Source</th>
+                <th>Level</th>
+                <th>Event Id</th>
+                <th>Event Name</th>
+                <th>Message</th>
+            </tr>
+        </thead>
+        <tbody>
+            <Virtualize Items="GetDisplayLogEntries()" Context="entry">
+                <tr>
+                    <td>@entry.Timestamp.ToString("G")</td>
+                    <td>@entry.Source</td>
+                    <td>@entry.Severity</td>
+                    <td>@entry.Id?.Id</td>
+                    <td>@entry.Id?.Name</td>
+                    <td>@entry.Message</td>
+                </tr>
+            </Virtualize>
+        </tbody>
+    </table>
+</div>
