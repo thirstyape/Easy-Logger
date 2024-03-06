@@ -15,16 +15,19 @@
 	  <Description>This project was created to provide an extension to the Easy.Log.Writer package that includes a Blazor logging endpoint. The base package can also output to the web console, but does not have advanced features such as custom log color or formats.</Description>
 	  <RepositoryUrl>https://github.com/thirstyape/Easy-Logger</RepositoryUrl>
 	  <RepositoryType>git</RepositoryType>
-	  <Version>2.0.7</Version>
+	  <Version>2.0.8</Version>
+	  <AssemblyVersion>2.0.8.0</AssemblyVersion>
+	  <FileVersion>2.0.8.0</FileVersion>
 	  <PackageReleaseNotes>
+		  2.0.8
+		  Update NuGet dependency to patch transitive security vulnerability
+		  
 		  2.0.7
 		  Fix for CSS not applying
-		  
+
 		  2.0.6
 		  Initial release
 	  </PackageReleaseNotes>
-	  <AssemblyVersion>2.0.7.0</AssemblyVersion>
-	  <FileVersion>2.0.7.0</FileVersion>
 	  <GenerateDocumentationFile>true</GenerateDocumentationFile>
 	  <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
@@ -37,12 +40,19 @@
     <SupportedPlatform Include="browser" />
   </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="[6.0.0,9)" />
-  </ItemGroup>
+	<ItemGroup Condition="'$(TargetFramework)' == 'net6.0'">
+		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="6.0.25" />
+	</ItemGroup>
+	<ItemGroup Condition="'$(TargetFramework)' == 'net7.0'">
+		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="7.0.14" />
+	</ItemGroup>
+	<ItemGroup Condition="'$(TargetFramework)' == 'net8.0'">
+		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="8.0.2" />
+		<PackageReference Include="Microsoft.Extensions.Logging" Version="8.0.*" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Easy-Logger\Easy-Logger.csproj" />
+	<ItemGroup>
+		<ProjectReference Include="..\Easy-Logger\Easy-Logger.csproj" />
   </ItemGroup>
 
 	<ItemGroup>
