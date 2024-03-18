@@ -17,7 +17,7 @@
             </div>
             <div class="column">
                 <div class="field">
-                    <label class="label">Log File Data</label>
+                    <Label For="() => InputModel.LogFileData" TooltipMode="TooltipMode" />
                     <div class="control has-icons-left">
                         <InputTextArea class="input" @bind-Value="InputModel.LogFileData" @oninput='OnLogFileDataChanged' autocomplete="off" rows="6" />
                         <span class="material-icons icon is-left">description</span>
@@ -34,7 +34,7 @@
         <div class="columns">
             <div class="column">
                 <div class="field">
-                    <label class="label">Start</label>
+                    <Label For="() => ViewModel.Start" TooltipMode="TooltipMode" />
                     <div class="control has-icons-left has-icons-right">
                         <InputDateTime @bind-Value=ViewModel.Start />
                         <div class="help is-danger">
@@ -43,7 +43,7 @@
                     </div>
                 </div>
                 <div class="field">
-                    <label class="label">End</label>
+                    <Label For="() => ViewModel.End" TooltipMode="TooltipMode" />
                     <div class="control has-icons-left has-icons-right">
                         <InputDateTime @bind-Value=ViewModel.End />
                         <div class="help is-danger">
@@ -54,7 +54,7 @@
             </div>
             <div class="column">
                 <div class="field">
-                    <label class="label">Event Id</label>
+                    <Label For="() => ViewModel.EventNumber" TooltipMode="TooltipMode" />
                     <div class="control has-icons-left">
                         <InputNumber class="input" @bind-Value=ViewModel.EventNumber />
                         <span class="material-icons icon is-left">numbers</span>
@@ -64,7 +64,7 @@
                     </div>
                 </div>
                 <div class="field">
-                    <label class="label">Event Name</label>
+                    <Label For="() => ViewModel.EventName" TooltipMode="TooltipMode" />
                     <div class="control has-icons-left">
                         <InputText class="input" @bind-Value=ViewModel.EventName />
                         <span class="material-icons icon is-left">title</span>
@@ -76,7 +76,7 @@
             </div>
             <div class="column">
                 <div class="field">
-                    <label class="label">Message Text</label>
+                    <Label For="() => ViewModel.SearchMessage" TooltipMode="TooltipMode" />
                     <div class="control has-icons-left">
                         <InputText class="input" @bind-Value=ViewModel.SearchMessage />
                         <span class="material-icons icon is-left">search</span>
@@ -86,7 +86,7 @@
                     </div>
                 </div>
                 <div class="field">
-                    <label class="label">Source</label>
+                    <Label For="() => ViewModel.Source" TooltipMode="TooltipMode" />
                     <div class="control has-icons-left is-expanded">
                         <div class="select is-fullwidth">
                             <InputSelect @bind-Value="ViewModel.Source">
@@ -105,7 +105,7 @@
         <div class="columns">
             <div class="column">
                 <div class="field">
-                    <label class="label">Log Levels</label>
+                    <Label For="() => ViewModel.SelectedLogLevels" TooltipMode="TooltipMode" />
                     <div class="control">                    
                         <InputFlaggedEnum @bind-Value="ViewModel.SelectedLogLevels" />
                     </div>

@@ -1,7 +1,9 @@
-﻿using Easy_Logger.Interfaces;
+﻿using easy_blazor_bulma;
+using Easy_Logger.Interfaces;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.Extensions.Logging;
+using System.ComponentModel.DataAnnotations;
 using System.Text.Json;
 
 namespace Easy_Logger_Parser.Pages;
@@ -10,6 +12,8 @@ public partial class Index : ComponentBase
 {
 	private readonly DataModel InputModel = new();
 	private readonly FilterModel ViewModel = new();
+
+	private readonly TooltipOptions TooltipMode = TooltipOptions.Right | TooltipOptions.HasArrow | TooltipOptions.Multiline;
 
 	private async Task AddFile(InputFileChangeEventArgs args)
 	{
@@ -102,19 +106,34 @@ public partial class Index : ComponentBase
 
 	private class DataModel
 	{
+		[Display(Name = "Log File Data", Description = "Contains the JSON from the logs to parse")]
 		public string? LogFileData { get; set; }
+
 		public List<ILoggerEntry>? LogEntries { get; set; }
 		public IEnumerable<string> LogSources { get; set; } = [];
 	}
 
 	private class FilterModel
 	{
+		[Display(Name = "Start", Description = "Filters to log entries created at or after the specified time")]
 		public DateTime? Start { get; set; }
+
+		[Display(Name = "End", Description = "Filters to log entries created at or before the specified time")]
 		public DateTime? End { get; set; }
+
+		[Display(Name = "Source", Description = "Filters to log entries with a matching source value")]
 		public string? Source { get; set; }
+
+		[Display(Name = "Log Levels", Description = "Filters to log entries with a level matching one of the selected options")]
 		public LogLevelFlagged SelectedLogLevels { get; set; } = LogLevelFlagged.None;
+
+		[Display(Name = "Event Id", Description = "Filters to log entries with a matching id value")]
 		public int? EventNumber { get; set; }
+
+		[Display(Name = "Event Name", Description = "Filters to log entries with a matching name value")]
 		public string? EventName { get; set; }
+
+		[Display(Name = "Message Text", Description = "Filters to log entries containing the provided text")]
 		public string? SearchMessage { get; set; }
 	}
 
