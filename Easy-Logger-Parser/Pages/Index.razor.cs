@@ -15,6 +15,14 @@ public partial class Index : ComponentBase
 
 	private readonly TooltipOptions TooltipMode = TooltipOptions.Right | TooltipOptions.HasArrow | TooltipOptions.Multiline;
 
+	private string? GetFileTypes()
+	{
+		if (DeviceInfo.Platform == DevicePlatform.Android)
+			return "text/plain,application/json";
+		else
+			return ".txt,.json,.log";
+	}
+
 	private async Task AddFile(InputFileChangeEventArgs args)
 	{
 		var file = args.GetMultipleFiles(1).FirstOrDefault();

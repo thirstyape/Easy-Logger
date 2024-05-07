@@ -8,7 +8,7 @@
                 <div class="field">
                     <label class="label">Upload Log File</label>
                     <div class="control has-icons-left">
-                        <InputFile class="input" OnChange="AddFile" accept=".txt,.json,.log" />
+                        <InputFile class="input" OnChange="AddFile" accept="@GetFileTypes()" />
                         <span class="material-icons icon is-left">file_upload</span>
                     </div>
                 </div>
