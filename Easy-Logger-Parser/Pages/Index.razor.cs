@@ -59,7 +59,14 @@ public partial class Index : ComponentBase
 
 			return true;
 		}
-		catch 
+		catch (JsonException)
+		{
+			if (data.StartsWith('[') == false && data.EndsWith(']') == false)
+				return TryParseLogFileData($"[{data}]");
+			else
+				return false;
+		}
+		catch
 		{
 			return false;
 		}

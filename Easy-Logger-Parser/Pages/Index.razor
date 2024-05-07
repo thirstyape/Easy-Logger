@@ -1,8 +1,6 @@
 ﻿@page "/"
 @inherits ComponentBase
 
-<TitleBlock Title="Easy Logger Parser" />
-
 <div class="container">
     <EditForm Model="InputModel">
         <div class="columns">
@@ -106,7 +104,7 @@
             <div class="column">
                 <div class="field">
                     <Label For="() => ViewModel.SelectedLogLevels" TooltipMode="TooltipMode" />
-                    <div class="control">                    
+                    <div class="control">
                         <InputFlaggedEnum @bind-Value="ViewModel.SelectedLogLevels" />
                     </div>
                 </div>

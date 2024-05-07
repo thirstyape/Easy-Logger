@@ -10,10 +10,10 @@ using System.Text.Json;
 
 namespace Easy_Logger.Loggers
 {
-    /// <summary>
-    /// Logging endpoint that records to JSON files
-    /// </summary>
-    public class JsonLogger : FileLoggerBase, ILogger
+	/// <summary>
+	/// Logging endpoint that records to JSON files
+	/// </summary>
+	public class JsonLogger : FileLoggerBase, ILogger
     {
         private readonly Func<JsonLoggerConfiguration> Configuration;
 
@@ -68,25 +68,36 @@ namespace Easy_Logger.Loggers
 
             try
             {
-                var entries = new List<LoggerEntry>();
-
                 var directory = GetTextLogDirectory(entry.Timestamp);
                 var file = GetTextLogFilename(entry.Timestamp);
                 var path = Path.Combine(directory, $"{file}.json");
-                
+
                 Directory.CreateDirectory(directory);
 
-                if (File.Exists(path))
+                if (current.IsDirtyMode)
                 {
-                    var text = File.ReadAllText(path);
-                    entries = JsonSerializer.Deserialize<List<LoggerEntry>>(text, current.Options)!;
-                }
+                    var text = JsonSerializer.Serialize(entry, current.Options);
 
-                entries.Add(entry);
+					using var writer = new StreamWriter(File.Open(path, FileMode.Append));
+					writer.WriteLine(text);
+					writer.Close();
+				}
+                else
+                {
+					var entries = new List<LoggerEntry>();
 
-                using var writer = new StreamWriter(File.Open(path, FileMode.Create));
-                writer.Write(JsonSerializer.Serialize(entries, current.Options));
-                writer.Close();
+					if (File.Exists(path))
+					{
+						var text = File.ReadAllText(path);
+						entries = JsonSerializer.Deserialize<List<LoggerEntry>>(text, current.Options)!;
+					}
+
+					entries.Add(entry);
+
+					using var writer = new StreamWriter(File.Open(path, FileMode.Create));
+					writer.Write(JsonSerializer.Serialize(entries, current.Options));
+					writer.Close();
+				}
             }
             catch { }
         }

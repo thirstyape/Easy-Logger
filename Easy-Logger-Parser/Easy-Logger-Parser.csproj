@@ -1,55 +1,55 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
-    <PropertyGroup>
-        <TargetFrameworks>net8.0-android;net8.0-ios;net8.0-maccatalyst</TargetFrameworks>
-        <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net8.0-windows10.0.19041.0</TargetFrameworks>
-        <OutputType>Exe</OutputType>
+	<PropertyGroup>
+		<TargetFrameworks>net8.0-android;net8.0-ios;net8.0-maccatalyst</TargetFrameworks>
+		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net8.0-windows10.0.19041.0</TargetFrameworks>
+		<OutputType>Exe</OutputType>
 		<RootNamespace>$(MSBuildProjectName.Replace("-", "_"))</RootNamespace>
-        <UseMaui>true</UseMaui>
-        <SingleProject>true</SingleProject>
-        <ImplicitUsings>enable</ImplicitUsings>
+		<UseMaui>true</UseMaui>
+		<SingleProject>true</SingleProject>
+		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
-        <EnableDefaultCssItems>false</EnableDefaultCssItems>
+		<EnableDefaultCssItems>false</EnableDefaultCssItems>
 		<Company>NF Software Inc.</Company>
 		<Product>Easy Logger Parser</Product>
 		<Copyright>Copyright 2023 $(Company)</Copyright>
-		<AssemblyVersion>2.0.6.0</AssemblyVersion>
-		<FileVersion>2.0.6.0</FileVersion>
-		<Version>2.0.6</Version>
-		<MauiVersion>8.0.10</MauiVersion>
+		<AssemblyVersion>2.0.10.0</AssemblyVersion>
+		<FileVersion>2.0.10.0</FileVersion>
+		<Version>2.0.10</Version>
+		<MauiVersion>8.0.21</MauiVersion>
 
-        <!-- Display name -->
-        <ApplicationTitle>Easy Logger Parser</ApplicationTitle>
+		<!-- Display name -->
+		<ApplicationTitle>Easy Logger Parser</ApplicationTitle>
 
-        <!-- App Identifier -->
-        <ApplicationId>com.nf_software_inc.easy_logger_parser</ApplicationId>
-        <ApplicationIdGuid>D1B106D6-AADE-4BEC-BF43-0FEC2E6EF991</ApplicationIdGuid>
+		<!-- App Identifier -->
+		<ApplicationId>com.nf_software_inc.easy_logger_parser</ApplicationId>
+		<ApplicationIdGuid>D1B106D6-AADE-4BEC-BF43-0FEC2E6EF991</ApplicationIdGuid>
 
-        <!-- Versions -->
-        <ApplicationDisplayVersion>2.0.6</ApplicationDisplayVersion>
-        <ApplicationVersion>2</ApplicationVersion>
+		<!-- Versions -->
+		<ApplicationDisplayVersion>2.0.10</ApplicationDisplayVersion>
+		<ApplicationVersion>2</ApplicationVersion>
 
-        <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">14.2</SupportedOSPlatformVersion>
-        <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">14.0</SupportedOSPlatformVersion>
-        <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">24.0</SupportedOSPlatformVersion>
-        <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</SupportedOSPlatformVersion>
-        <TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
+		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">14.2</SupportedOSPlatformVersion>
+		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">14.0</SupportedOSPlatformVersion>
+		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">24.0</SupportedOSPlatformVersion>
+		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</SupportedOSPlatformVersion>
+		<TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
 		<DefaultLanguage>en</DefaultLanguage>
-    </PropertyGroup>
-	
-    <ItemGroup>
-        <!-- App Icon -->
+	</PropertyGroup>
+
+	<ItemGroup>
+		<!-- App Icon -->
 		<MauiIcon Include="wwwroot\favicon.png" />
-		
-        <!-- Splash Screen -->
-        <MauiSplashScreen Include="Resources\Images\splash.svg" Color="#512BD4" BaseSize="128,128" />
 
-        <!-- Images -->
-        <MauiImage Include="Resources\Images\*" />
+		<!-- Splash Screen -->
+		<MauiSplashScreen Include="Resources\Images\splash.svg" Color="#512BD4" BaseSize="128,128" />
 
-        <!-- Custom Fonts -->
-        <MauiFont Include="Resources\Fonts\*" />
-    </ItemGroup>
+		<!-- Images -->
+		<MauiImage Include="Resources\Images\*" />
+
+		<!-- Custom Fonts -->
+		<MauiFont Include="Resources\Fonts\*" />
+	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Easy.Blazor.Bulma" Version="1.0.*" />
@@ -58,8 +58,8 @@
 		<PackageReference Include="Microsoft.AspNetCore.Components.WebView.Maui" Version="$(MauiVersion)" />
 	</ItemGroup>
 
-    <ItemGroup>
-      <ProjectReference Include="..\Easy-Logger-Blazor\Easy-Logger-Blazor.csproj" />
-      <ProjectReference Include="..\Easy-Logger\Easy-Logger.csproj" />
-    </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\Easy-Logger-Blazor\Easy-Logger-Blazor.csproj" />
+		<ProjectReference Include="..\Easy-Logger\Easy-Logger.csproj" />
+	</ItemGroup>
 </Project>

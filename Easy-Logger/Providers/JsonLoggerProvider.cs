@@ -49,6 +49,11 @@ namespace Easy_Logger.Providers
     /// </summary>
     public class JsonLoggerConfiguration : FileLoggerConfiguration
     {
+        /// <summary>
+        /// Specifies whether to enable dirty JSON mode. Dirty mode does not produce a valid JSON file, it will be missing the opening and closing bracket; however, it does not need to parse the file on new entries and thus is much faster.
+        /// </summary>
+        public bool IsDirtyMode { get; set; }
+
         /// <inheritdoc cref="ILoggerConfiguration.Formatter" />
         /// <remarks>
         /// Not used in <see cref="JsonLogger"/>

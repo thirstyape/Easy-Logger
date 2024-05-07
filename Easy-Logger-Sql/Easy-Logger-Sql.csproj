@@ -1,40 +1,40 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-	  <TargetFramework>netstandard2.1</TargetFramework>
-	  <Nullable>enable</Nullable>
-	  <RootNamespace>$(MSBuildProjectName.Replace("-", "_"))</RootNamespace>
-	  <Authors>NF Software Inc.</Authors>
-	  <Company>NF Software Inc.</Company>
-	  <Copyright>Copyright 2023 $(Company)</Copyright>
-	  <Version>2.0.9</Version>
-	  <AssemblyVersion>2.0.9.0</AssemblyVersion>
-	  <FileVersion>2.0.9.0</FileVersion>
-	  <PackageId>Easy.Log.Writer.Sql</PackageId>
-	  <PackageTags>logger logging log text json memory console sql utility</PackageTags>
-	  <RepositoryUrl>https://github.com/thirstyape/Easy-Logger</RepositoryUrl>
-	  <PackageProjectUrl>https://github.com/thirstyape/Easy-Logger</PackageProjectUrl>
-	  <Description>
-		  This project was created to provide an extension to the Easy.Log.Writer package that includes a SQL Server logging endpoint.
-	  </Description>
-	  <PackageReleaseNotes>
-		  2.0.9
-		  Update publishing to include source link, deterministic, and compiler flags
-		  
-		  2.0.8
-		  Update NuGet dependency to patch transitive security vulnerability
+	<PropertyGroup>
+		<TargetFramework>netstandard2.1</TargetFramework>
+		<Nullable>enable</Nullable>
+		<RootNamespace>$(MSBuildProjectName.Replace("-", "_"))</RootNamespace>
+		<Authors>NF Software Inc.</Authors>
+		<Company>NF Software Inc.</Company>
+		<Copyright>Copyright 2023 $(Company)</Copyright>
+		<Version>2.0.9</Version>
+		<AssemblyVersion>2.0.9.0</AssemblyVersion>
+		<FileVersion>2.0.9.0</FileVersion>
+		<PackageId>Easy.Log.Writer.Sql</PackageId>
+		<PackageTags>logger logging log text json memory console sql utility</PackageTags>
+		<RepositoryUrl>https://github.com/thirstyape/Easy-Logger</RepositoryUrl>
+		<PackageProjectUrl>https://github.com/thirstyape/Easy-Logger</PackageProjectUrl>
+		<Description>
+			This project was created to provide an extension to the Easy.Log.Writer package that includes a SQL Server logging endpoint.
+		</Description>
+		<PackageReleaseNotes>
+			2.0.9
+			Update publishing to include source link, deterministic, and compiler flags
 
-		  2.0.7
-		  Update SQL dependency to patch security issue
+			2.0.8
+			Update NuGet dependency to patch transitive security vulnerability
 
-		  2.0.6
-		  Update with changes from Easy.Log.Writer
+			2.0.7
+			Update SQL dependency to patch security issue
 
-		  2.0.3
-		  Initial release
-	  </PackageReleaseNotes>
-  
-</PropertyGroup>
+			2.0.6
+			Update with changes from Easy.Log.Writer
+
+			2.0.3
+			Initial release
+		</PackageReleaseNotes>
+
+	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)' == 'Release'">
 		<DocumentationFile>$(ProjectDir)..\$(AssemblyName).xml</DocumentationFile>
@@ -53,9 +53,9 @@
 		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.*" PrivateAssets="All"/>
 	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Easy-Logger\Easy-Logger.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\Easy-Logger\Easy-Logger.csproj" />
+	</ItemGroup>
 
 	<ItemGroup>
 		<None Include="..\icon.png">
@@ -73,6 +73,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="Microsoft.Data.SqlClient" Version="[5.1.5,6)" />
+		<PackageReference Include="Microsoft.Data.SqlClient" Version="[5.1.5,6)" />
 	</ItemGroup>
 </Project>
