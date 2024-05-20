@@ -76,7 +76,7 @@ namespace Easy_Logger.Loggers
 
                 if (current.IsDirtyMode)
                 {
-                    var text = JsonSerializer.Serialize(entry, current.Options);
+                    var text = JsonSerializer.Serialize(entry, current.Options) + ',';
 
 					using var writer = new StreamWriter(File.Open(path, FileMode.Append));
 					writer.WriteLine(text);
