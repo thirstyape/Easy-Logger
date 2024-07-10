@@ -1,16 +1,16 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
 	<PropertyGroup>
-		<TargetFrameworks>net6.0;net7.0;net8.0</TargetFrameworks>
+		<TargetFrameworks>net6.0;net8.0</TargetFrameworks>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<RootNamespace>$(MSBuildProjectName.Replace("-", "_"))</RootNamespace>
 		<Authors>NF Software Inc.</Authors>
 		<Company>NF Software Inc.</Company>
 		<Copyright>Copyright 2023 $(Company)</Copyright>
-		<Version>2.0.9</Version>
-		<AssemblyVersion>2.0.9.0</AssemblyVersion>
-		<FileVersion>2.0.9.0</FileVersion>
+		<Version>2.1.12</Version>
+		<AssemblyVersion>2.1.12.0</AssemblyVersion>
+		<FileVersion>2.1.12.0</FileVersion>
 		<PackageId>Easy.Log.Writer.Blazor</PackageId>
 		<PackageTags>logger logging log text json memory console blazor utility</PackageTags>
 		<RepositoryUrl>https://github.com/thirstyape/Easy-Logger</RepositoryUrl>
@@ -20,6 +20,9 @@
 			The base package can also output to the web console, but does not have advanced features such as custom log color or formats.
 		</Description>
 		<PackageReleaseNotes>
+			2.1.12
+			Drop support for .NET 7.0 and Update requirement for System.Text.Json to patch vulnerability
+
 			2.0.9
 			Update publishing to include source link, deterministic, and compiler flags
 
