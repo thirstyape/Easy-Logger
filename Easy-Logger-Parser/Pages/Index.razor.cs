@@ -1,4 +1,5 @@
 ﻿using easy_blazor_bulma;
+using easy_core;
 using Easy_Logger.Interfaces;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
@@ -31,7 +32,7 @@ public partial class Index : ComponentBase
 			return;
 
 		var buffer = new byte[file.Size];
-		var max = 10 * 1_048_576;
+		var max = 100 * 1_048_576;
 
 		await file.OpenReadStream(max).ReadAsync(buffer);
 
@@ -55,7 +56,11 @@ public partial class Index : ComponentBase
 
 			if (InputModel.LogEntries != null)
 			{
-				InputModel.LogSources = InputModel.LogEntries.Where(x => string.IsNullOrWhiteSpace(x.Source) == false).Select(x => x.Source!).Distinct();
+				InputModel.LogSources = InputModel.LogEntries
+					.Where(x => string.IsNullOrWhiteSpace(x.Source) == false)
+					.Select(x => x.Source!)
+					.Distinct()
+					.ToList();
 
 				ViewModel.Start = InputModel.LogEntries.Min(x => x.Timestamp);
 				ViewModel.End = InputModel.LogEntries.Max(x => x.Timestamp);
@@ -84,19 +89,19 @@ public partial class Index : ComponentBase
 
 	private List<ILoggerEntry> GetDisplayLogEntries()
 	{
-        var entries = InputModel.LogEntries?.AsEnumerable();
-
-        if (entries == null)
+        if (InputModel.LogEntries == null)
 			return [];
 
+		var predicate = PredicateBuilder.Create<ILoggerEntry>();
+
 		if (ViewModel.Start != null)
-			entries = entries.Where(x => x.Timestamp >= ViewModel.Start.Value);
+			predicate = predicate.And(x => x.Timestamp >= ViewModel.Start.Value);
 
 		if (ViewModel.End != null)
-            entries = entries.Where(x => x.Timestamp <= ViewModel.End.Value);
+			predicate = predicate.And(x => x.Timestamp <= ViewModel.End.Value);
 
 		if (ViewModel.EventNumber != null)
-			entries = entries.Where(x => x.Id != null && x.Id.Value.Id == ViewModel.EventNumber.Value);
+			predicate = predicate.And(x => x.Id != null && x.Id.Value.Id == ViewModel.EventNumber.Value);
 
 		if (ViewModel.SelectedLogLevels != LogLevelFlagged.None)
 		{
@@ -106,19 +111,21 @@ public partial class Index : ComponentBase
 				if ((ViewModel.SelectedLogLevels & flag) != 0)
 					levels.Add(FlaggedToStandard[flag]);
 
-			entries = entries.Where(x => levels.Contains(x.Severity));
+			predicate = predicate.And(x => levels.Contains(x.Severity));
         }
 
 		if (string.IsNullOrWhiteSpace(ViewModel.Source) == false)
-			entries = entries.Where(x => string.Equals(x.Source, ViewModel.Source, StringComparison.OrdinalIgnoreCase));
+			predicate = predicate.And(x => string.Equals(x.Source, ViewModel.Source, StringComparison.OrdinalIgnoreCase));
 
         if (string.IsNullOrWhiteSpace(ViewModel.EventName) == false)
-            entries = entries.Where(x => x.Id != null && string.Equals(x.Id.Value.Name, ViewModel.EventName, StringComparison.OrdinalIgnoreCase));
+			predicate = predicate.And(x => x.Id != null && string.Equals(x.Id.Value.Name, ViewModel.EventName, StringComparison.OrdinalIgnoreCase));
 
 		if (string.IsNullOrWhiteSpace(ViewModel.SearchMessage) == false)
-			entries = entries.Where(x => x.Message.Contains(ViewModel.SearchMessage, StringComparison.OrdinalIgnoreCase));
+			predicate = predicate.And(x => x.Message.Contains(ViewModel.SearchMessage, StringComparison.OrdinalIgnoreCase));
 
-        return entries.OrderByDescending(x => x.Timestamp).ToList();
+		predicate ??= PredicateBuilder.True<ILoggerEntry>();
+
+		return InputModel.LogEntries.Where(predicate.Compile()).OrderByDescending(x => x.Timestamp).ToList();
 	}
 
 	private class DataModel
@@ -127,7 +134,7 @@ public partial class Index : ComponentBase
 		public string? LogFileData { get; set; }
 
 		public List<ILoggerEntry>? LogEntries { get; set; }
-		public IEnumerable<string> LogSources { get; set; } = [];
+		public List<string> LogSources { get; set; } = [];
 	}
 
 	private class FilterModel
