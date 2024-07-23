@@ -32,11 +32,12 @@ These instuctions can be used to acquire and implement the library.
 
 ### Installation
 
-To use this library either clone a copy of the repository or check out one of the NuGet packages. There are 3 packages.
+To use this library:
 
-- [Main NuGet package](https://www.nuget.org/packages/Easy.Log.Writer/)
-- [Blazor NuGet package](https://www.nuget.org/packages/Easy.Log.Writer.Blazor/), enables colored logging to the browser console, includes the main package
-- [SQL Server NuGet package](https://www.nuget.org/packages/Easy.Log.Writer.Sql/), enables logging to SQL Server, includes the main package
+* Clone a copy of the repository
+* Reference the [Main NuGet package](https://www.nuget.org/packages/Easy.Log.Writer/), [Blazor NuGet package](https://www.nuget.org/packages/Easy.Log.Writer.Blazor/), or [SQL Server NuGet package](https://www.nuget.org/packages/Easy.Log.Writer.Sql/)
+* Try it on Android with the [Google Play Store App](https://play.google.com/store/apps/details?id=com.nf_software_inc.easy_logger_parser) or APK file (see releases)
+* Try it on Windows with the [Microsoft Store App](https://apps.microsoft.com/detail/9nbmgcqm9fw1) or MSIX package (see releases)
 
 ### Usage
 
