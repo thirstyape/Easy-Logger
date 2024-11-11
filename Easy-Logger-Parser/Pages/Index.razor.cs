@@ -125,10 +125,41 @@ public partial class Index : ComponentBase
 
 		predicate ??= PredicateBuilder.True<ILoggerEntry>();
 
-		return InputModel.LogEntries.Where(predicate.Compile()).OrderByDescending(x => x.Timestamp).ToList();
+        var property = ViewModel.SortColumn.ToLambda<ILoggerEntry>();
+
+        if (ViewModel.SortDirection)
+			return InputModel.LogEntries.Where(predicate.Compile()).AsQueryable().OrderBy(property).ToList();
+		else
+			return InputModel.LogEntries.Where(predicate.Compile()).AsQueryable().OrderByDescending(property).ToList();
 	}
 
-	private class DataModel
+    private string GetTableHeaderCssClass(string css, string column)
+	{
+		if (ViewModel.SortColumn == column)
+			css += " is-link";
+
+        return string.Join(' ', css, "is-clickable is-unselectable");
+	}
+
+    private void UpdateSortValues(string column)
+    {
+        if (ViewModel.SortColumn == column)
+            ViewModel.SortDirection = !ViewModel.SortDirection;
+        else
+            ViewModel.SortColumn = column;
+    }
+
+    private string? GetSortArrow(string column)
+    {
+        if (ViewModel.SortColumn != column)
+            return "swap_vert";
+        else if (ViewModel.SortDirection)
+            return "arrow_upward";
+        else
+            return "arrow_downward";
+    }
+
+    private class DataModel
 	{
 		[Display(Name = "Log File Data", Description = "Contains the JSON from the logs to parse")]
 		public string? LogFileData { get; set; }
@@ -159,6 +190,10 @@ public partial class Index : ComponentBase
 
 		[Display(Name = "Message Text", Description = "Filters to log entries containing the provided text")]
 		public string? SearchMessage { get; set; }
+
+		public string SortColumn { get; set; } = nameof(ILoggerEntry.Timestamp);
+
+		public bool SortDirection { get; set; }
 	}
 
 	[Flags]
