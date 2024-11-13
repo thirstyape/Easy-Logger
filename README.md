@@ -36,7 +36,8 @@ To use this library:
 
 * Clone a copy of the repository
 * Reference the [Main NuGet package](https://www.nuget.org/packages/Easy.Log.Writer/), [Blazor NuGet package](https://www.nuget.org/packages/Easy.Log.Writer.Blazor/), or [SQL Server NuGet package](https://www.nuget.org/packages/Easy.Log.Writer.Sql/)
-* Try it on Android with the [Google Play Store App](https://play.google.com/store/apps/details?id=com.nf_software_inc.easy_logger_parser) or APK file (see releases)
+* Try it on Android with the [Play Store App](https://play.google.com/store/apps/details?id=com.nf_software_inc.easy_logger_parser) or APK file (see releases)
+* Try it on iOS with the [App Store App](https://apps.apple.com/ca/app/easy-logger-parser/id6738100992)
 * Try it on Windows with the [Microsoft Store App](https://apps.microsoft.com/detail/9nbmgcqm9fw1) or MSIX package (see releases)
 
 ### Usage
