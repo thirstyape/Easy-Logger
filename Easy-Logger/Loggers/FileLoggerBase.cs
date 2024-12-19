@@ -130,18 +130,18 @@ namespace Easy_Logger.Loggers
         /// <summary>
         /// The top-level file system directory to save geneated log files into
         /// </summary>
-        public string LogDirectory { get; set; } = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? Path.Combine(Path.GetPathRoot(Environment.SystemDirectory), "Temp\\Logs") : "/tmp/logs";
+        public string LogDirectory { get; set; } = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? Path.Combine(Path.GetPathRoot(Environment.SystemDirectory), "Temp", "Logs") : "/tmp/logs";
 
         /// <summary>
         /// The template to generate the filename to save logs to
         /// </summary>
         /// <remarks>
         /// Supported template parts:
-        /// 
+        ///
         /// [Date:MM-dd]: Outputs the timestamp for the log entry using standard <see cref="DateTime.ToString(string)"/> options, can be used multiple times.
         /// [Source]    : Outputs the namespace for the source that generated the log entry.
-        /// 
-        /// Example: 
+        ///
+        /// Example:
         ///   <example>
         ///   Template: [Date:yyyy-MM-dd]_[Source]_[Date:HH]
         ///   Outputs : 2023-04-26_My.Namespace_15

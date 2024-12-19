@@ -23,7 +23,13 @@ namespace Easy_Logger.Providers
     {
         private readonly ConcurrentDictionary<string, ILogger> Loggers = new ConcurrentDictionary<string, ILogger>(StringComparer.OrdinalIgnoreCase);
         private SqlLoggerConfiguration Configuration;
-        private readonly IDisposable OnChangeToken;
+        private readonly IDisposable? OnChangeToken;
+
+		/// <param name="configuration">The configuration to use with created loggers</param>
+		public SqlLoggerProvider(SqlLoggerConfiguration configuration)
+        {
+            Configuration = configuration;
+        }
 
         /// <param name="configuration">The configuration to use with created loggers</param>
         public SqlLoggerProvider(IOptionsMonitor<SqlLoggerConfiguration> configuration)
@@ -41,7 +47,7 @@ namespace Easy_Logger.Providers
         public void Dispose()
         {
             Loggers.Clear();
-            OnChangeToken.Dispose();
+            OnChangeToken?.Dispose();
         }
     }
 
@@ -159,7 +165,7 @@ namespace Easy_Logger.Providers
 
             return builder;
         }
-        
+
         /// <summary>
         /// Adds <see cref="SqlLogger"/> to the service collection with the provided options
         /// </summary>

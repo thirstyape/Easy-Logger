@@ -22,7 +22,18 @@ namespace Easy_Logger.Providers
     {
         private readonly ConcurrentDictionary<string, ILogger> Loggers = new ConcurrentDictionary<string, ILogger>(StringComparer.OrdinalIgnoreCase);
         private ConsoleLoggerConfiguration Configuration;
-        private readonly IDisposable OnChangeToken;
+        private readonly IDisposable? OnChangeToken;
+
+		public ConsoleLoggerProvider()
+		{
+			Configuration = new ConsoleLoggerConfiguration();
+		}
+
+		/// <param name="configuration">The configuration to use with created loggers</param>
+		public ConsoleLoggerProvider(ConsoleLoggerConfiguration configuration)
+        {
+            Configuration = configuration;
+        }
 
         /// <param name="configuration">The configuration to use with created loggers</param>
         public ConsoleLoggerProvider(IOptionsMonitor<ConsoleLoggerConfiguration> configuration)
@@ -40,7 +51,7 @@ namespace Easy_Logger.Providers
         public void Dispose()
         {
             Loggers.Clear();
-            OnChangeToken.Dispose();
+            OnChangeToken?.Dispose();
         }
     }
 

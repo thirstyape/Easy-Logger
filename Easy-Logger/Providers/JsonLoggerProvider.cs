@@ -11,21 +11,32 @@ using System.Text.Json;
 
 namespace Easy_Logger.Providers
 {
-    /// <summary>
-    /// Creates instances of <see cref="JsonLogger"/> as required
-    /// </summary>
-    /// <remarks>
-    /// Based on <see href="https://docs.microsoft.com/en-us/dotnet/core/extensions/custom-logging-provider">Documentation</see>.
-    /// </remarks>
-    [ProviderAlias("JsonLogger")]
+	/// <summary>
+	/// Creates instances of <see cref="JsonLogger"/> as required
+	/// </summary>
+	/// <remarks>
+	/// Based on <see href="https://docs.microsoft.com/en-us/dotnet/core/extensions/custom-logging-provider">Documentation</see>.
+	/// </remarks>
+	[ProviderAlias("JsonLogger")]
     public class JsonLoggerProvider : ILoggerProvider
     {
         private readonly ConcurrentDictionary<string, ILogger> Loggers = new ConcurrentDictionary<string, ILogger>(StringComparer.OrdinalIgnoreCase);
         private JsonLoggerConfiguration Configuration;
-        private readonly IDisposable OnChangeToken;
+        private readonly IDisposable? OnChangeToken;
 
-        /// <param name="configuration">The configuration to use with created loggers</param>
-        public JsonLoggerProvider(IOptionsMonitor<JsonLoggerConfiguration> configuration)
+		public JsonLoggerProvider()
+		{
+			Configuration = new JsonLoggerConfiguration();
+		}
+
+		/// <param name="configuration">The configuration to use with created loggers</param>
+		public JsonLoggerProvider(JsonLoggerConfiguration configuration)
+		{
+			Configuration = configuration;
+		}
+
+		/// <param name="configuration">The configuration to use with created loggers</param>
+		public JsonLoggerProvider(IOptionsMonitor<JsonLoggerConfiguration> configuration)
         {
             Configuration = configuration.CurrentValue;
             OnChangeToken = configuration.OnChange(updated => Configuration = updated);
@@ -40,7 +51,7 @@ namespace Easy_Logger.Providers
         public void Dispose()
         {
             Loggers.Clear();
-            OnChangeToken.Dispose();
+            OnChangeToken?.Dispose();
         }
     }
 

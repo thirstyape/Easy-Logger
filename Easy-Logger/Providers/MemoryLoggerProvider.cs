@@ -22,7 +22,18 @@ namespace Easy_Logger.Providers
     {
         private readonly ConcurrentDictionary<string, ILogger> Loggers = new ConcurrentDictionary<string, ILogger>(StringComparer.OrdinalIgnoreCase);
         private MemoryLoggerConfiguration Configuration;
-        private readonly IDisposable OnChangeToken;
+        private readonly IDisposable? OnChangeToken;
+
+        public MemoryLoggerProvider()
+        {
+            Configuration = new MemoryLoggerConfiguration();
+        }
+
+        /// <param name="configuration">The configuration to use with created loggers</param>
+        public MemoryLoggerProvider(MemoryLoggerConfiguration configuration)
+        {
+            Configuration = configuration;
+        }
 
         /// <param name="configuration">The configuration to use with created loggers</param>
         public MemoryLoggerProvider(IOptionsMonitor<MemoryLoggerConfiguration> configuration)
@@ -45,7 +56,7 @@ namespace Easy_Logger.Providers
         public void Dispose()
         {
             Loggers.Clear();
-            OnChangeToken.Dispose();
+            OnChangeToken?.Dispose();
         }
     }
 
